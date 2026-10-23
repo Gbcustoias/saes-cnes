@@ -1,38 +1,29 @@
-package br.com.fatec.saescnes.service;
+package br.com.fatec.saescnes.model;
 
-import br.com.fatec.saescnes.model.Estabelecimento;
-import br.com.fatec.saescnes.repository.EstabelecimentoRepository;
-import org.springframework.stereotype.Service;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.List;
-import java.util.Optional;
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Estabelecimento {
 
-@Service
-public class EstabelecimentoService {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private final EstabelecimentoRepository repository;
-
-    public EstabelecimentoService(EstabelecimentoRepository repository) {
-        this.repository = repository;
-    }
-
-    public List<Estabelecimento> listarTodos() {
-        return repository.findAll();
-    }
-
-    public Optional<Estabelecimento> buscarPorId(Long id) {
-        return repository.findById(id);
-    }
-
-    public Estabelecimento salvar(Estabelecimento estabelecimento) {
-        return repository.save(estabelecimento);
-    }
-
-    public Estabelecimento atualizar(Estabelecimento estabelecimento) {
-        return repository.save(estabelecimento);
-    }
-
-    public void excluir(Long id) {
-        repository.deleteById(id);
-    }
+    private String codigoCnes;
+    private String nomeEstabelecimento;
+    private String uf;
+    private String municipio;
+    private String tipoEstabelecimento;
+    private String esferaAdministrativa;
+    private Boolean atendeSus;
+    private Double latitude;
+    private Double longitude;
 }
