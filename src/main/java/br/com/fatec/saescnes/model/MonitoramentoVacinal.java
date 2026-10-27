@@ -2,6 +2,7 @@ package br.com.fatec.saescnes.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "monitoramento_vacinal")
@@ -45,5 +46,5 @@ public class MonitoramentoVacinal {
 
     private Integer meningOport;
 
-    private String dataHora;
+    private LocalDate dataHora;
 }

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class ImportacaoCsvService {
@@ -26,6 +28,8 @@ public class ImportacaoCsvService {
             String linha;
 
             br.readLine();
+            DateTimeFormatter formatter =
+                    DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
             while ((linha = br.readLine()) != null) {
 
@@ -80,7 +84,7 @@ public class ImportacaoCsvService {
                         Integer.parseInt(dados[14]));
 
                 monitoramento.setDataHora(
-                        dados[15]);
+                        LocalDate.parse(dados[15], formatter));
 
                 repository.save(monitoramento);
             }
