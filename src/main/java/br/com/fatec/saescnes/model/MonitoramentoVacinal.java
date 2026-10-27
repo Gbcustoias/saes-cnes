@@ -1,38 +1,41 @@
 package br.com.fatec.saescnes.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
+@Table(name = "monitoramento_vacinal")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "monitoramento_vacinal")
 public class MonitoramentoVacinal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String regiao;
+    private Integer codigoRegiao;
+
+    private String nomeRegiao;
 
     private String uf;
 
-    private String regional;
+    private Integer codigoRegional;
 
-    private String municipio;
+    private String nomeRegional;
 
-    private Integer nDomicilios;
+    private Integer codigoMunicipio;
 
-    private Integer nCriancasResid;
+    private String nomeMunicipio;
 
-    private Integer nCriancasSemComp;
+    private Integer numeroDomicilios;
 
-    private Integer nCriancasComComp;
+    private Integer numeroCriancasResid;
+
+    private Integer numeroCriancasSemComp;
+
+    private Integer numeroCriancasComComp;
 
     private Integer pnccAdeq;
 
