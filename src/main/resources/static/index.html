@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoramento Vacinal</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h1>Monitoramento Vacinal</h1>
+
+<section>
+    <h2>Importação CSV</h2>
+
+    <input type="file" id="arquivoCsv">
+
+    <button id="btnImportar">
+        Importar CSV
+    </button>
+</section>
+
+<section>
+    <h2>Consulta</h2>
+
+    <input
+            type="text"
+            id="uf"
+            placeholder="UF">
+
+    <input
+            type="text"
+            id="municipio"
+            placeholder="Município">
+
+    <button id="btnPesquisar">
+        Pesquisar
+    </button>
+</section>
+
+<section>
+    <h2>Resultados</h2>
+
+    <table border="1">
+
+        <thead>
+        <tr>
+            <th>UF</th>
+            <th>Município</th>
+            <th>Domicílios</th>
+            <th>Crianças</th>
+        </tr>
+        </thead>
+
+        <tbody id="resultado">
+        </tbody>
+
+    </table>
+</section>
+
+<script src="js/script.js"></script>
+
+</body>
+</html>
