@@ -31,4 +31,8 @@ public class MonitoramentoVacinalController {
             @PathVariable String municipio) {
         return service.buscarPorMunicipio(municipio);
     }
+    @GetMapping("/quantidade")
+    public Long quantidade() {
+        return service.quantidadeRegistros();
+    }
 }

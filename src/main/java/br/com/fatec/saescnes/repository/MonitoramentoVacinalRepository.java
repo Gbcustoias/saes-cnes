@@ -10,5 +10,6 @@ public interface MonitoramentoVacinalRepository
 
     List<MonitoramentoVacinal> findByUf(String uf);
 
-    List<MonitoramentoVacinal> findByMunicipio(String municipio);
+    List<MonitoramentoVacinal> findByNomeMunicipio(String nomeMunicipio);
+
 }

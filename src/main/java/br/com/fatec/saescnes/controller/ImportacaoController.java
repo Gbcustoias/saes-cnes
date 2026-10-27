@@ -24,7 +24,7 @@ public class ImportacaoController {
             service.importar(arquivo.getInputStream());
 
             return ResponseEntity.ok(
-                    "Arquivo importado com sucesso!");
+                    "Arquivo importado com sucesso");
 
         } catch (Exception e) {
 

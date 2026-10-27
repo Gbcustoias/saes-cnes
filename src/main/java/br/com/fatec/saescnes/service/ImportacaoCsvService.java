@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ImportacaoCsvService {
@@ -28,8 +30,12 @@ public class ImportacaoCsvService {
             String linha;
 
             br.readLine();
+
             DateTimeFormatter formatter =
                     DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            List<MonitoramentoVacinal> registros =
+                    new ArrayList<>();
 
             while ((linha = br.readLine()) != null) {
 
@@ -84,13 +90,33 @@ public class ImportacaoCsvService {
                         Integer.parseInt(dados[14]));
 
                 monitoramento.setDataHora(
-                        LocalDate.parse(dados[15], formatter));
+                        LocalDate.parse(
+                                dados[15],
+                                formatter));
 
-                repository.save(monitoramento);
+                registros.add(monitoramento);
+
+                if (registros.size() >= 500) {
+
+                    repository.saveAll(registros);
+
+                    registros.clear();
+                }
             }
 
+            if (!registros.isEmpty()) {
+
+                repository.saveAll(registros);
+            }
+
+            System.out.println("IMPORTACAO CONCLUIDA");
+
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao importar CSV", e);
+
+            e.printStackTrace();
+
+            throw new RuntimeException(
+                    "Erro ao importar CSV", e);
         }
     }
 }

@@ -24,10 +24,13 @@ public class MonitoramentoVacinalService {
     }
 
     public List<MonitoramentoVacinal> buscarPorMunicipio(String municipio) {
-        return repository.findByMunicipio(municipio);
+        return repository.findByNomeMunicipio(municipio);
     }
 
     public MonitoramentoVacinal salvar(MonitoramentoVacinal monitoramento) {
         return repository.save(monitoramento);
+    }
+    public Long quantidadeRegistros() {
+        return repository.count();
     }
 }
