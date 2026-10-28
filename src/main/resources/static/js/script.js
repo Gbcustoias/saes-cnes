@@ -208,4 +208,49 @@ async function carregarIndicadores() {
     document.getElementById("totalMeningOport")
         .innerText = formatarNumero(valorMeningOport);
 }
+carregarMapa();
 
+async function carregarMapa() {
+
+    const resposta =
+        await fetch("/api/monitoramento/mapa/criancas");
+
+    const dados =
+        await resposta.json();
+
+    const valoresPorUf = {};
+
+    dados.forEach(item => {
+        valoresPorUf[item.uf] = item.valor;
+    });
+
+    am5.ready(function () {
+
+        const root =
+            am5.Root.new("mapaBrasil");
+
+        root.setThemes([
+            am5themes_Animated.new(root)
+        ]);
+
+        const chart =
+            root.container.children.push(
+                am5map.MapChart.new(root, {
+                    projection: am5map.geoMercator()
+                })
+            );
+
+        const polygonSeries =
+            chart.series.push(
+                am5map.MapPolygonSeries.new(root, {
+                    geoJSON: am5geodata_brazilLow
+                })
+            );
+
+        polygonSeries.mapPolygons.template.setAll({
+            tooltipText: "{name}",
+            interactive: true
+        });
+
+    });
+}
