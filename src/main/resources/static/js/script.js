@@ -10,6 +10,22 @@ document
     .getElementById("btnImportar")
     .addEventListener("click", importarArquivo);
 
+carregarIndicadores();
+
+function formatarNumero(valor) {
+
+    if (
+        valor === null ||
+        valor === undefined ||
+        isNaN(valor)
+    ) {
+        return "0";
+    }
+
+    return Number(valor)
+        .toLocaleString("pt-BR");
+}
+
 async function pesquisar() {
 
     const uf =
@@ -122,3 +138,74 @@ async function importarArquivo() {
         botao.innerText = "Importar CSV";
     }
 }
+
+async function carregarIndicadores() {
+
+    const registros =
+        await fetch("/api/monitoramento/quantidade");
+
+    const totalRegistros =
+        await registros.json();
+
+    document.getElementById("totalRegistros")
+        .innerText = formatarNumero(totalRegistros);
+
+    const mediaCom =
+        await fetch("/api/monitoramento/media-com");
+
+    const valorCom =
+        await mediaCom.json();
+
+    document.getElementById("mediaComComp")
+        .innerText = formatarNumero(
+        Math.round(valorCom ?? 0)
+    );
+
+    const mediaSem =
+        await fetch("/api/monitoramento/media-sem");
+
+    const valorSem =
+        await mediaSem.json();
+
+    document.getElementById("mediaSemComp")
+        .innerText = formatarNumero(
+        Math.round(valorSem ?? 0)
+    );
+
+    const pnccAdeq =
+        await fetch("/api/monitoramento/pncc-adeq");
+
+    const valorPnccAdeq =
+        await pnccAdeq.json();
+
+    document.getElementById("totalPnccAdeq")
+        .innerText = formatarNumero(valorPnccAdeq);
+
+    const meningAdeq =
+        await fetch("/api/monitoramento/mening-adeq");
+
+    const valorMeningAdeq =
+        await meningAdeq.json();
+
+    document.getElementById("totalMeningAdeq")
+        .innerText = formatarNumero(valorMeningAdeq);
+
+    const pnccOport =
+        await fetch("/api/monitoramento/pncc-oport");
+
+    const valorPnccOport =
+        await pnccOport.json();
+
+    document.getElementById("totalPnccOport")
+        .innerText = formatarNumero(valorPnccOport);
+
+    const meningOport =
+        await fetch("/api/monitoramento/mening-oport");
+
+    const valorMeningOport =
+        await meningOport.json();
+
+    document.getElementById("totalMeningOport")
+        .innerText = formatarNumero(valorMeningOport);
+}
+

@@ -2,6 +2,7 @@ package br.com.fatec.saescnes.repository;
 
 import br.com.fatec.saescnes.model.MonitoramentoVacinal;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -12,5 +13,53 @@ public interface MonitoramentoVacinalRepository
 
     List<MonitoramentoVacinal> findByNomeMunicipioContainingIgnoreCase(
             String nomeMunicipio);
+
+    @Query("""
+           SELECT COUNT(DISTINCT m.uf)
+           FROM MonitoramentoVacinal m
+           """)
+    Long quantidadeUfs();
+
+    @Query("""
+           SELECT COUNT(DISTINCT m.nomeMunicipio)
+           FROM MonitoramentoVacinal m
+           """)
+    Long quantidadeMunicipios();
+
+    @Query("""
+       SELECT COALESCE(SUM(m.pnccAdeq),0)
+       FROM MonitoramentoVacinal m
+       """)
+    Long totalPnccAdeq();
+
+    @Query("""
+       SELECT COALESCE(SUM(m.meningAdeq),0)
+       FROM MonitoramentoVacinal m
+       """)
+    Long totalMeningAdeq();
+
+    @Query("""
+       SELECT COALESCE(SUM(m.pnccOport),0)
+       FROM MonitoramentoVacinal m
+       """)
+    Long totalPnccOport();
+
+    @Query("""
+       SELECT COALESCE(SUM(m.meningOport),0)
+       FROM MonitoramentoVacinal m
+       """)
+    Long totalMeningOport();
+
+    @Query("""
+       SELECT AVG(m.numeroCriancasComComp)
+       FROM MonitoramentoVacinal m
+       """)
+    Double mediaCriancasComComp();
+
+    @Query("""
+       SELECT AVG(m.numeroCriancasSemComp)
+       FROM MonitoramentoVacinal m
+       """)
+    Double mediaCriancasSemComp();
 
 }

@@ -39,4 +39,43 @@ public class MonitoramentoVacinalController {
     public void limparBanco() {
         service.limparBanco();
     }
+    @GetMapping("/ufs")
+    public Long quantidadeUfs() {
+        return service.quantidadeUfs();
+    }
+
+    @GetMapping("/municipios")
+    public Long quantidadeMunicipios() {
+        return service.quantidadeMunicipios();
+    }
+
+    @GetMapping("/pncc-adeq")
+    public Long totalPnccAdeq() {
+        return service.totalPnccAdeq();
+    }
+
+    @GetMapping("/mening-adeq")
+    public Long totalMeningAdeq() {
+        return service.totalMeningAdeq();
+    }
+
+    @GetMapping("/pncc-oport")
+    public Long totalPnccOport() {
+        return service.totalPnccOport();
+    }
+
+    @GetMapping("/mening-oport")
+    public Long totalMeningOport() {
+        return service.totalMeningOport();
+    }
+
+    @GetMapping("/media-com")
+    public Double mediaComComp() {
+        return service.mediaCriancasComComp();
+    }
+
+    @GetMapping("/media-sem")
+    public Double mediaSemComp() {
+        return service.mediaCriancasSemComp();
+    }
 }
