@@ -62,4 +62,12 @@ public interface MonitoramentoVacinalRepository
        """)
     Double mediaCriancasSemComp();
 
+    @Query("""
+SELECT m.uf, SUM(m.numeroCriancasResid)
+FROM MonitoramentoVacinal m
+GROUP BY m.uf
+ORDER BY m.uf
+""")
+    List<Object[]> totalCriancasPorUf();
+
 }

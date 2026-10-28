@@ -3,6 +3,7 @@ package br.com.fatec.saescnes.controller;
 import br.com.fatec.saescnes.model.MonitoramentoVacinal;
 import br.com.fatec.saescnes.service.MonitoramentoVacinalService;
 import org.springframework.web.bind.annotation.*;
+import br.com.fatec.saescnes.model.IndicadorUf;
 
 import java.util.List;
 
@@ -77,5 +78,10 @@ public class MonitoramentoVacinalController {
     @GetMapping("/media-sem")
     public Double mediaSemComp() {
         return service.mediaCriancasSemComp();
+    }
+
+    @GetMapping("/mapa/criancas")
+    public List<IndicadorUf> totalCriancasPorUf() {
+        return service.totalCriancasPorUf();
     }
 }

@@ -3,6 +3,8 @@ package br.com.fatec.saescnes.service;
 import br.com.fatec.saescnes.model.MonitoramentoVacinal;
 import br.com.fatec.saescnes.repository.MonitoramentoVacinalRepository;
 import org.springframework.stereotype.Service;
+import br.com.fatec.saescnes.model.IndicadorUf;
+import java.util.ArrayList;
 
 import java.util.List;
 
@@ -69,5 +71,26 @@ public class MonitoramentoVacinalService {
 
     public Double mediaCriancasSemComp() {
         return repository.mediaCriancasSemComp();
+    }
+
+    public List<IndicadorUf> totalCriancasPorUf() {
+
+        List<Object[]> dados =
+                repository.totalCriancasPorUf();
+
+        List<IndicadorUf> resultado =
+                new ArrayList<>();
+
+        for (Object[] linha : dados) {
+
+            resultado.add(
+                    new IndicadorUf(
+                            (String) linha[0],
+                            ((Number) linha[1]).longValue()
+                    )
+            );
+        }
+
+        return resultado;
     }
 }
