@@ -5,6 +5,8 @@ import br.com.fatec.saescnes.repository.MonitoramentoVacinalRepository;
 import org.springframework.stereotype.Service;
 import br.com.fatec.saescnes.model.IndicadorUf;
 import java.util.ArrayList;
+import br.com.fatec.saescnes.model.DashboardUfDTO;
+
 
 import java.util.List;
 
@@ -87,6 +89,31 @@ public class MonitoramentoVacinalService {
                     new IndicadorUf(
                             (String) linha[0],
                             ((Number) linha[1]).longValue()
+                    )
+            );
+        }
+
+        return resultado;
+    }
+    public List<DashboardUfDTO> dashboardPorUf() {
+
+        List<Object[]> dados =
+                repository.dashboardPorUf();
+
+        List<DashboardUfDTO> resultado =
+                new java.util.ArrayList<>();
+
+        for (Object[] linha : dados) {
+
+            resultado.add(
+                    new DashboardUfDTO(
+                            (String) linha[0],
+                            ((Number) linha[1]).longValue(),
+                            ((Number) linha[2]).longValue(),
+                            ((Number) linha[3]).longValue(),
+                            ((Number) linha[4]).longValue(),
+                            ((Number) linha[5]).longValue(),
+                            ((Number) linha[6]).longValue()
                     )
             );
         }

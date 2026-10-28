@@ -4,6 +4,7 @@ import br.com.fatec.saescnes.model.MonitoramentoVacinal;
 import br.com.fatec.saescnes.service.MonitoramentoVacinalService;
 import org.springframework.web.bind.annotation.*;
 import br.com.fatec.saescnes.model.IndicadorUf;
+import br.com.fatec.saescnes.model.DashboardUfDTO;
 
 import java.util.List;
 
@@ -83,5 +84,10 @@ public class MonitoramentoVacinalController {
     @GetMapping("/mapa/criancas")
     public List<IndicadorUf> totalCriancasPorUf() {
         return service.totalCriancasPorUf();
+    }
+
+    @GetMapping("/mapa/dashboard")
+    public List<DashboardUfDTO> dashboardPorUf() {
+        return service.dashboardPorUf();
     }
 }

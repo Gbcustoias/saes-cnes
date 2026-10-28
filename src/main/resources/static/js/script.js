@@ -213,15 +213,15 @@ carregarMapa();
 async function carregarMapa() {
 
     const resposta =
-        await fetch("/api/monitoramento/mapa/criancas");
+        await fetch("/api/monitoramento/mapa/dashboard");
 
     const dados =
         await resposta.json();
 
-    const valoresPorUf = {};
+    const dadosPorUf = {};
 
     dados.forEach(item => {
-        valoresPorUf[item.uf] = item.valor;
+        dadosPorUf[item.uf] = item;
     });
 
     am5.ready(function () {
@@ -248,8 +248,57 @@ async function carregarMapa() {
             );
 
         polygonSeries.mapPolygons.template.setAll({
-            tooltipText: "{name}",
             interactive: true
+        });
+
+        polygonSeries.events.on("datavalidated", () => {
+
+            polygonSeries.mapPolygons.each(polygon => {
+
+                const uf =
+                    polygon.dataItem?.dataContext?.id
+                        ?.replace("BR-", "");
+
+                const dadosUf =
+                    dadosPorUf[uf];
+                console.log(uf, dadosUf);
+
+                if (!dadosUf) {
+                    return;
+                }
+                polygon.set(
+                    "tooltipText",
+                    `${polygon.dataItem.dataContext.name}
+
+Crianças: ${dadosUf.criancas.toLocaleString("pt-BR")}
+Municípios: ${dadosUf.municipios.toLocaleString("pt-BR")}
+
+Pneumo Oportuna: ${dadosUf.pnccOport.toLocaleString("pt-BR")}
+Pneumo Adequada: ${dadosUf.pnccAdeq.toLocaleString("pt-BR")}
+
+Meningo Oportuna: ${dadosUf.meningOport.toLocaleString("pt-BR")}
+Meningo Adequada: ${dadosUf.meningAdeq.toLocaleString("pt-BR")}`
+                );
+
+                polygon.dataItem.dataContext.criancas =
+                    dadosUf.criancas;
+
+                polygon.dataItem.dataContext.municipios =
+                    dadosUf.municipios;
+
+                polygon.dataItem.dataContext.pnccAdeq =
+                    dadosUf.pnccAdeq;
+
+                polygon.dataItem.dataContext.pnccOport =
+                    dadosUf.pnccOport;
+
+                polygon.dataItem.dataContext.meningAdeq =
+                    dadosUf.meningAdeq;
+
+                polygon.dataItem.dataContext.meningOport =
+                    dadosUf.meningOport;
+            });
+
         });
 
     });

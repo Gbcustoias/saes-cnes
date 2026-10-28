@@ -70,4 +70,20 @@ ORDER BY m.uf
 """)
     List<Object[]> totalCriancasPorUf();
 
+    @Query("""
+SELECT
+    m.uf,
+    SUM(m.numeroCriancasResid),
+    COUNT(DISTINCT m.nomeMunicipio),
+    SUM(m.pnccAdeq),
+    SUM(m.pnccOport),
+    SUM(m.meningAdeq),
+    SUM(m.meningOport)
+FROM MonitoramentoVacinal m
+GROUP BY m.uf
+ORDER BY m.uf
+""")
+    List<Object[]> dashboardPorUf();
+
 }
+
