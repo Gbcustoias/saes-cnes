@@ -20,11 +20,11 @@ public class MonitoramentoVacinalService {
     }
 
     public List<MonitoramentoVacinal> buscarPorUf(String uf) {
-        return repository.findByUf(uf);
+        return repository.findByUfContainingIgnoreCase(uf);
     }
 
     public List<MonitoramentoVacinal> buscarPorMunicipio(String municipio) {
-        return repository.findByNomeMunicipio(municipio);
+        return repository.findByNomeMunicipioContainingIgnoreCase(municipio);
     }
 
     public MonitoramentoVacinal salvar(MonitoramentoVacinal monitoramento) {

@@ -96,7 +96,7 @@ public class ImportacaoCsvService {
 
                 registros.add(monitoramento);
 
-                if (registros.size() >= 500) {
+                if (registros.size() >= 100) {
 
                     repository.saveAll(registros);
 

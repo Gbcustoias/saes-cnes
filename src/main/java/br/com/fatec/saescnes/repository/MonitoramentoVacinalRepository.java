@@ -8,8 +8,9 @@ import java.util.List;
 public interface MonitoramentoVacinalRepository
         extends JpaRepository<MonitoramentoVacinal, Long> {
 
-    List<MonitoramentoVacinal> findByUf(String uf);
+    List<MonitoramentoVacinal> findByUfContainingIgnoreCase(String uf);
 
-    List<MonitoramentoVacinal> findByNomeMunicipio(String nomeMunicipio);
+    List<MonitoramentoVacinal> findByNomeMunicipioContainingIgnoreCase(
+            String nomeMunicipio);
 
 }
