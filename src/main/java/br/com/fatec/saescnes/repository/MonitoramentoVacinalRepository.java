@@ -78,12 +78,30 @@ SELECT
     SUM(m.pnccAdeq),
     SUM(m.pnccOport),
     SUM(m.meningAdeq),
-    SUM(m.meningOport)
+    SUM(m.meningOport),
+    SUM(m.numeroCriancasComComp),
+    SUM(m.numeroCriancasSemComp)
 FROM MonitoramentoVacinal m
 GROUP BY m.uf
 ORDER BY m.uf
 """)
     List<Object[]> dashboardPorUf();
+
+    @Query("""
+       SELECT COALESCE(SUM(m.numeroCriancasResid),0)
+       FROM MonitoramentoVacinal m
+       """)
+    Long totalCriancasMonitoradas();
+    @Query("""
+       SELECT COALESCE(SUM(m.numeroCriancasComComp),0)
+       FROM MonitoramentoVacinal m
+       """)
+    Long totalCriancasComComp();
+    @Query("""
+       SELECT COALESCE(SUM(m.numeroCriancasSemComp),0)
+       FROM MonitoramentoVacinal m
+       """)
+    Long totalCriancasSemComp();
 
 }
 

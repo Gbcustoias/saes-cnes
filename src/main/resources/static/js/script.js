@@ -1,3 +1,12 @@
+let metricaMapa = "criancas";
+
+let dadosMapa = [];
+
+let polygonSeriesGlobal;
+let estadoSelecionado = null;
+let corOriginalEstado = null;
+
+
 document
     .getElementById("btnPesquisar")
     .addEventListener("click", pesquisar);
@@ -142,7 +151,7 @@ async function importarArquivo() {
 async function carregarIndicadores() {
 
     const registros =
-        await fetch("/api/monitoramento/quantidade");
+        await fetch("/api/monitoramento/criancas-monitoradas");
 
     const totalRegistros =
         await registros.json();
@@ -151,26 +160,22 @@ async function carregarIndicadores() {
         .innerText = formatarNumero(totalRegistros);
 
     const mediaCom =
-        await fetch("/api/monitoramento/media-com");
+        await fetch("/api/monitoramento/total-com");
 
     const valorCom =
         await mediaCom.json();
 
     document.getElementById("mediaComComp")
-        .innerText = formatarNumero(
-        Math.round(valorCom ?? 0)
-    );
+        .innerText = formatarNumero(valorCom);
 
     const mediaSem =
-        await fetch("/api/monitoramento/media-sem");
+        await fetch("/api/monitoramento/total-sem");
 
     const valorSem =
         await mediaSem.json();
 
     document.getElementById("mediaSemComp")
-        .innerText = formatarNumero(
-        Math.round(valorSem ?? 0)
-    );
+        .innerText = formatarNumero(valorSem);
 
     const pnccAdeq =
         await fetch("/api/monitoramento/pncc-adeq");
@@ -217,6 +222,8 @@ async function carregarMapa() {
 
     const dados =
         await resposta.json();
+    dadosMapa = dados;
+
 
     const dadosPorUf = {};
 
@@ -240,20 +247,20 @@ async function carregarMapa() {
                 })
             );
 
-        const polygonSeries =
+        polygonSeriesGlobal =
             chart.series.push(
                 am5map.MapPolygonSeries.new(root, {
                     geoJSON: am5geodata_brazilLow
                 })
             );
 
-        polygonSeries.mapPolygons.template.setAll({
+        polygonSeriesGlobal.mapPolygons.template.setAll({
             interactive: true
         });
 
-        polygonSeries.events.on("datavalidated", () => {
+        polygonSeriesGlobal.events.on("datavalidated", () => {
 
-            polygonSeries.mapPolygons.each(polygon => {
+            polygonSeriesGlobal.mapPolygons.each(polygon => {
 
                 const uf =
                     polygon.dataItem?.dataContext?.id
@@ -266,18 +273,80 @@ async function carregarMapa() {
                 if (!dadosUf) {
                     return;
                 }
+                polygon.events.on("click", () => {
+                    if (
+                        estadoSelecionado &&
+                        estadoSelecionado.dataItem.dataContext.id ===
+                        polygon.dataItem.dataContext.id
+                    ) {
+                        estadoSelecionado.set(
+                            "fill",
+                            corOriginalEstado
+                        );
+
+                        estadoSelecionado = null;
+
+                        document.getElementById("ufSelecionada")
+                            .innerText = "Brasil";
+
+                        carregarIndicadores();
+
+                        return;
+                    }
+
+                    if (estadoSelecionado) {
+                        estadoSelecionado.set(
+                            "fill",
+                            corOriginalEstado
+                        );
+                    }
+
+                    corOriginalEstado =
+                        polygon.get("fill");
+
+                    estadoSelecionado = polygon;
+
+                    polygon.set(
+                        "fill",
+                        am5.color(0xff6b35)
+                    );
+
+                    document.getElementById("ufSelecionada")
+                        .innerText = dadosUf.uf;
+
+                    document.getElementById("totalRegistros")
+                        .innerText = formatarNumero(dadosUf.criancas);
+
+                    document.getElementById("mediaComComp")
+                        .innerText = formatarNumero(dadosUf.comComp);
+
+                    document.getElementById("mediaSemComp")
+                        .innerText = formatarNumero(dadosUf.semComp);
+
+                    document.getElementById("totalPnccOport")
+                        .innerText = formatarNumero(dadosUf.pnccOport);
+
+                    document.getElementById("totalPnccAdeq")
+                        .innerText = formatarNumero(dadosUf.pnccAdeq);
+
+                    document.getElementById("totalMeningOport")
+                        .innerText = formatarNumero(dadosUf.meningOport);
+
+                    document.getElementById("totalMeningAdeq")
+                        .innerText = formatarNumero(dadosUf.meningAdeq);
+                });
                 polygon.set(
                     "tooltipText",
                     `${polygon.dataItem.dataContext.name}
+    
+Crianças: ${formatarNumero(dadosUf.criancas)}
+Municípios: ${formatarNumero(dadosUf.municipios)}
 
-Crianças: ${dadosUf.criancas.toLocaleString("pt-BR")}
-Municípios: ${dadosUf.municipios.toLocaleString("pt-BR")}
+Pneumo Oportuna: ${formatarNumero(dadosUf.pnccOport)}
+Pneumo Adequada: ${formatarNumero(dadosUf.pnccAdeq)}
 
-Pneumo Oportuna: ${dadosUf.pnccOport.toLocaleString("pt-BR")}
-Pneumo Adequada: ${dadosUf.pnccAdeq.toLocaleString("pt-BR")}
-
-Meningo Oportuna: ${dadosUf.meningOport.toLocaleString("pt-BR")}
-Meningo Adequada: ${dadosUf.meningAdeq.toLocaleString("pt-BR")}`
+Meningo Oportuna: ${formatarNumero(dadosUf.meningOport)}
+Meningo Adequada: ${formatarNumero(dadosUf.meningAdeq)}`
                 );
 
                 polygon.dataItem.dataContext.criancas =

@@ -18,17 +18,22 @@
 <section id="indicadores">
 
     <div class="card">
-        <h3>Total de Registros</h3>
+        <h3>UF Selecionada</h3>
+        <p id="ufSelecionada">Brasil</p>
+    </div>
+
+    <div class="card">
+        <h3>Total de Crianças Monitoradas</h3>
         <p id="totalRegistros">0</p>
     </div>
 
     <div class="card">
-        <h3>Média de Crianças Com Comprovante</h3>
+        <h3>Total de Crianças Com Comprovante</h3>
         <p id="mediaComComp">0</p>
     </div>
 
     <div class="card">
-        <h3>Média de Crianças Sem Comprovante</h3>
+        <h3>Total de Crianças Sem Comprovante</h3>
         <p id="mediaSemComp">0</p>
     </div>
 
@@ -51,11 +56,36 @@
         <h3>Vacina Meningocócica - Esquema Adequado</h3>
         <p id="totalMeningAdeq">0</p>
     </div>
+
+
 </section>
 
 <section>
 
     <h2>Mapa do Brasil - Crianças Monitoradas por UF</h2>
+    <div id="filtrosMapa">
+
+        <button onclick="alterarMapa('criancas')">
+            Crianças Monitoradas
+        </button>
+
+        <button onclick="alterarMapa('pnccOport')">
+            Pneumo Oportuna
+        </button>
+
+        <button onclick="alterarMapa('pnccAdeq')">
+            Pneumo Adequada
+        </button>
+
+        <button onclick="alterarMapa('meningOport')">
+            Meningo Oportuna
+        </button>
+
+        <button onclick="alterarMapa('meningAdeq')">
+            Meningo Adequada
+        </button>
+
+    </div>
 
     <div id="mapaBrasil"></div>
 

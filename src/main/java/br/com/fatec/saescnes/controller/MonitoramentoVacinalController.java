@@ -90,4 +90,17 @@ public class MonitoramentoVacinalController {
     public List<DashboardUfDTO> dashboardPorUf() {
         return service.dashboardPorUf();
     }
+    @GetMapping("/criancas-monitoradas")
+    public Long totalCriancasMonitoradas() {
+        return service.totalCriancasMonitoradas();
+    }
+    @GetMapping("/total-com")
+    public Long totalComComp() {
+        return service.totalCriancasComComp();
+    }
+
+    @GetMapping("/total-sem")
+    public Long totalSemComp() {
+        return service.totalCriancasSemComp();
+    }
 }

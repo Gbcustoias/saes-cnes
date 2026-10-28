@@ -113,11 +113,23 @@ public class MonitoramentoVacinalService {
                             ((Number) linha[3]).longValue(),
                             ((Number) linha[4]).longValue(),
                             ((Number) linha[5]).longValue(),
-                            ((Number) linha[6]).longValue()
+                            ((Number) linha[6]).longValue(),
+                            ((Number) linha[7]).longValue(),
+                            ((Number) linha[8]).longValue()
                     )
             );
         }
 
         return resultado;
+    }
+    public Long totalCriancasMonitoradas() {
+        return repository.totalCriancasMonitoradas();
+    }
+    public Long totalCriancasComComp() {
+        return repository.totalCriancasComComp();
+    }
+
+    public Long totalCriancasSemComp() {
+        return repository.totalCriancasSemComp();
     }
 }
