@@ -35,4 +35,8 @@ public class MonitoramentoVacinalController {
     public Long quantidade() {
         return service.quantidadeRegistros();
     }
+    @DeleteMapping("/limpar")
+    public void limparBanco() {
+        service.limparBanco();
+    }
 }

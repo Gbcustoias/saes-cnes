@@ -33,4 +33,8 @@ public class MonitoramentoVacinalService {
     public Long quantidadeRegistros() {
         return repository.count();
     }
+    public void limparBanco() {
+        repository.deleteAll();
+    }
+
 }
