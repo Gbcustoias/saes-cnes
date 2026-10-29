@@ -25,8 +25,10 @@ public class ImportacaoService {
                 new RestTemplate();
 
         repository.deleteAll();
+        repository.flush();
 
         int offset = 0;
+
         long totalImportado = 0;
 
         java.util.Set<Long> codigosProcessados =
@@ -45,6 +47,10 @@ public class ImportacaoService {
                             Map.class
                     );
 
+            if (resposta == null) {
+                break;
+            }
+
             List<Map<String, Object>> estabelecimentos =
                     (List<Map<String, Object>>) resposta.get(
                             "estabelecimentos"
@@ -57,28 +63,34 @@ public class ImportacaoService {
                 break;
             }
 
-            System.out.println(
-                    "Pagina " + offset +
-                            " - Registros: " +
-                            estabelecimentos.size()
-            );
-
             List<EstabelecimentoCnes> lote =
                     new java.util.ArrayList<>();
 
             for (Map<String, Object> item : estabelecimentos) {
 
-                Long codigoCnes =
-                        Long.valueOf(
-                                item.get("codigo_cnes")
-                                        .toString()
-                        );
+                Object codigoObj =
+                        item.get("codigo_cnes");
 
-                if (codigosProcessados.contains(codigoCnes)) {
+                if (codigoObj == null) {
                     continue;
                 }
 
-                codigosProcessados.add(codigoCnes);
+                Long codigoCnes =
+                        Long.valueOf(
+                                codigoObj.toString()
+                        );
+
+                if (
+                        codigosProcessados.contains(
+                                codigoCnes
+                        )
+                ) {
+                    continue;
+                }
+
+                codigosProcessados.add(
+                        codigoCnes
+                );
 
                 EstabelecimentoCnes estabelecimento =
                         new EstabelecimentoCnes();
@@ -87,19 +99,27 @@ public class ImportacaoService {
                         codigoCnes
                 );
 
-                estabelecimento.setCodigoUf(
-                        Integer.valueOf(
-                                item.get("codigo_uf")
-                                        .toString()
-                        )
-                );
+                Object codigoUf =
+                        item.get("codigo_uf");
 
-                estabelecimento.setCodigoMunicipio(
-                        Integer.valueOf(
-                                item.get("codigo_municipio")
-                                        .toString()
-                        )
-                );
+                if (codigoUf != null) {
+                    estabelecimento.setCodigoUf(
+                            Integer.valueOf(
+                                    codigoUf.toString()
+                            )
+                    );
+                }
+
+                Object codigoMunicipio =
+                        item.get("codigo_municipio");
+
+                if (codigoMunicipio != null) {
+                    estabelecimento.setCodigoMunicipio(
+                            Integer.valueOf(
+                                    codigoMunicipio.toString()
+                            )
+                    );
+                }
 
                 estabelecimento.setNomeRazaoSocial(
                         (String) item.get(
@@ -125,13 +145,18 @@ public class ImportacaoService {
                         )
                 );
 
-                estabelecimento.setCodigoTipoUnidade(
-                        Integer.valueOf(
-                                item.get(
-                                        "codigo_tipo_unidade"
-                                ).toString()
-                        )
-                );
+                Object tipoUnidade =
+                        item.get(
+                                "codigo_tipo_unidade"
+                        );
+
+                if (tipoUnidade != null) {
+                    estabelecimento.setCodigoTipoUnidade(
+                            Integer.valueOf(
+                                    tipoUnidade.toString()
+                            )
+                    );
+                }
 
                 estabelecimento.setEndereco(
                         (String) item.get(
@@ -151,8 +176,13 @@ public class ImportacaoService {
                         );
 
                 if (telefone != null) {
+
                     estabelecimento.setTelefone(
                             telefone.toString()
+                                    .replace("(", "")
+                                    .replace(")", "")
+                                    .replace("-", "")
+                                    .trim()
                     );
                 }
 
@@ -161,42 +191,65 @@ public class ImportacaoService {
                                 "latitude_estabelecimento_decimo_grau"
                         );
 
+                if (latitude != null) {
+
+                    try {
+
+                        Double valorLatitude =
+                                Double.valueOf(
+                                        latitude.toString()
+                                );
+
+                        if (
+                                Math.abs(
+                                        valorLatitude
+                                ) <= 90
+                        ) {
+
+                            estabelecimento.setLatitude(
+                                    valorLatitude
+                            );
+                        }
+
+                    } catch (Exception ignored) {
+                    }
+                }
+
                 Object longitude =
                         item.get(
                                 "longitude_estabelecimento_decimo_grau"
                         );
 
-                if (latitude != null) {
-
-                    Double valorLatitude =
-                            Double.valueOf(
-                                    latitude.toString()
-                            );
-
-                    if (Math.abs(valorLatitude) <= 90) {
-                        estabelecimento.setLatitude(
-                                valorLatitude
-                        );
-                    }
-                }
-
                 if (longitude != null) {
 
-                    Double valorLongitude =
-                            Double.valueOf(
-                                    longitude.toString()
-                            );
+                    try {
 
-                    if (Math.abs(valorLongitude) <= 180) {
-                        estabelecimento.setLongitude(
-                                valorLongitude
-                        );
+                        Double valorLongitude =
+                                Double.valueOf(
+                                        longitude.toString()
+                                );
+
+                        if (
+                                Math.abs(
+                                        valorLongitude
+                                ) <= 180
+                        ) {
+
+                            estabelecimento.setLongitude(
+                                    valorLongitude
+                            );
+                        }
+
+                    } catch (Exception ignored) {
                     }
                 }
 
                 if (
                         estabelecimento.getNomeFantasia()
-                                == null
+                                == null ||
+                                estabelecimento
+                                        .getNomeFantasia()
+                                        .isBlank()
                 ) {
 
                     estabelecimento.setNomeFantasia(
@@ -270,22 +323,33 @@ public class ImportacaoService {
                         )
                 );
 
-                lote.add(estabelecimento);
+                lote.add(
+                        estabelecimento
+                );
             }
 
-            repository.saveAll(lote);
+            if (!lote.isEmpty()) {
 
-            totalImportado += lote.size();
+                repository.saveAll(
+                        lote
+                );
 
-            System.out.println(
-                    "Total acumulado: " +
-                            totalImportado
-            );
+                totalImportado +=
+                        lote.size();
+            }
+
+            if (totalImportado % 1000 == 0) {
+
+                System.out.println(
+                        "Total importado: "
+                                + totalImportado
+                );
+            }
 
             if (totalImportado >= 10000) {
 
                 System.out.println(
-                        "LIMITE DE 10000 REGISTROS ATINGIDO"
+                        "LIMITE DE REGISTROS ATINGIDO"
                 );
 
                 break;
@@ -293,5 +357,10 @@ public class ImportacaoService {
 
             offset += 20;
         }
+
+        System.out.println(
+                "SINCRONIZACAO CONCLUIDA. TOTAL: "
+                        + totalImportado
+        );
     }
 }

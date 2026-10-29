@@ -150,75 +150,94 @@ async function importarArquivo() {
 
 async function carregarIndicadores() {
 
-    const registros =
-        await fetch("/api/monitoramento/criancas-monitoradas");
+    const estabelecimentos =
+        await fetch(
+            "/api/cnes/total-estabelecimentos"
+        );
 
-    const totalRegistros =
-        await registros.json();
+    const totalEstabelecimentos =
+        await estabelecimentos.json();
 
     document.getElementById("totalRegistros")
-        .innerText = formatarNumero(totalRegistros);
+        .innerText = formatarNumero(
+        totalEstabelecimentos
+    );
 
-    const mediaCom =
-        await fetch("/api/monitoramento/total-com");
+    const hospitalar =
+        await fetch(
+            "/api/cnes/total-hospitalar"
+        );
 
-    const valorCom =
-        await mediaCom.json();
+    const totalHospitalar =
+        await hospitalar.json();
 
     document.getElementById("mediaComComp")
-        .innerText = formatarNumero(valorCom);
+        .innerText = formatarNumero(
+        totalHospitalar
+    );
 
-    const mediaSem =
-        await fetch("/api/monitoramento/total-sem");
+    const ambulatorial =
+        await fetch(
+            "/api/cnes/total-ambulatorial"
+        );
 
-    const valorSem =
-        await mediaSem.json();
+    const totalAmbulatorial =
+        await ambulatorial.json();
 
     document.getElementById("mediaSemComp")
-        .innerText = formatarNumero(valorSem);
+        .innerText = formatarNumero(
+        totalAmbulatorial
+    );
 
-    const pnccAdeq =
-        await fetch("/api/monitoramento/pncc-adeq");
+    const centroCirurgico =
+        await fetch(
+            "/api/cnes/total-centro-cirurgico"
+        );
 
-    const valorPnccAdeq =
-        await pnccAdeq.json();
+    const totalCentroCirurgico =
+        await centroCirurgico.json();
 
     document.getElementById("totalPnccAdeq")
-        .innerText = formatarNumero(valorPnccAdeq);
+        .innerText = formatarNumero(
+        totalCentroCirurgico
+    );
 
-    const meningAdeq =
-        await fetch("/api/monitoramento/mening-adeq");
+    const centroObstetrico =
+        await fetch(
+            "/api/cnes/total-centro-obstetrico"
+        );
 
-    const valorMeningAdeq =
-        await meningAdeq.json();
+    const totalCentroObstetrico =
+        await centroObstetrico.json();
 
     document.getElementById("totalMeningAdeq")
-        .innerText = formatarNumero(valorMeningAdeq);
+        .innerText = formatarNumero(
+        totalCentroObstetrico
+    );
 
-    const pnccOport =
-        await fetch("/api/monitoramento/pncc-oport");
+    const centroNeonatal =
+        await fetch(
+            "/api/cnes/total-centro-neonatal"
+        );
 
-    const valorPnccOport =
-        await pnccOport.json();
-
-    document.getElementById("totalPnccOport")
-        .innerText = formatarNumero(valorPnccOport);
-
-    const meningOport =
-        await fetch("/api/monitoramento/mening-oport");
-
-    const valorMeningOport =
-        await meningOport.json();
+    const totalCentroNeonatal =
+        await centroNeonatal.json();
 
     document.getElementById("totalMeningOport")
-        .innerText = formatarNumero(valorMeningOport);
+        .innerText = formatarNumero(
+        totalCentroNeonatal
+    );
+
+    document.getElementById("totalPnccOport")
+        .innerText =
+        "CNES";
 }
 carregarMapa();
 
 async function carregarMapa() {
 
     const resposta =
-        await fetch("/api/monitoramento/mapa/dashboard");
+        await fetch("/api/cnes/dashboard-uf");
 
     const dados =
         await resposta.json();
@@ -228,7 +247,7 @@ async function carregarMapa() {
     const dadosPorUf = {};
 
     dados.forEach(item => {
-        dadosPorUf[item.uf] = item;
+        dadosPorUf[item.codigoUf] = item;
     });
 
     am5.ready(function () {
@@ -312,41 +331,56 @@ async function carregarMapa() {
                     );
 
                     document.getElementById("ufSelecionada")
-                        .innerText = dadosUf.uf;
+                        .innerText = dadosUf.codigoUf;
 
                     document.getElementById("totalRegistros")
-                        .innerText = formatarNumero(dadosUf.criancas);
+                        .innerText = formatarNumero(
+                        dadosUf.estabelecimentos
+                    );
 
                     document.getElementById("mediaComComp")
-                        .innerText = formatarNumero(dadosUf.comComp);
+                        .innerText = formatarNumero(
+                        dadosUf.hospitalares
+                    );
 
                     document.getElementById("mediaSemComp")
-                        .innerText = formatarNumero(dadosUf.semComp);
-
-                    document.getElementById("totalPnccOport")
-                        .innerText = formatarNumero(dadosUf.pnccOport);
+                        .innerText = formatarNumero(
+                        dadosUf.ambulatoriais
+                    );
 
                     document.getElementById("totalPnccAdeq")
-                        .innerText = formatarNumero(dadosUf.pnccAdeq);
-
-                    document.getElementById("totalMeningOport")
-                        .innerText = formatarNumero(dadosUf.meningOport);
+                        .innerText = formatarNumero(
+                        dadosUf.centrosCirurgicos
+                    );
 
                     document.getElementById("totalMeningAdeq")
-                        .innerText = formatarNumero(dadosUf.meningAdeq);
+                        .innerText = formatarNumero(
+                        dadosUf.centrosObstetricos
+                    );
+
+                    document.getElementById("totalMeningOport")
+                        .innerText = formatarNumero(
+                        dadosUf.centrosNeonatais
+                    );
+
+                    document.getElementById("totalPnccOport")
+                        .innerText = "CNES";
                 });
                 polygon.set(
                     "tooltipText",
                     `${polygon.dataItem.dataContext.name}
-    
-Crianças: ${formatarNumero(dadosUf.criancas)}
-Municípios: ${formatarNumero(dadosUf.municipios)}
 
-Pneumo Oportuna: ${formatarNumero(dadosUf.pnccOport)}
-Pneumo Adequada: ${formatarNumero(dadosUf.pnccAdeq)}
+Estabelecimentos: ${formatarNumero(dadosUf.estabelecimentos)}
 
-Meningo Oportuna: ${formatarNumero(dadosUf.meningOport)}
-Meningo Adequada: ${formatarNumero(dadosUf.meningAdeq)}`
+Hospitalares: ${formatarNumero(dadosUf.hospitalares)}
+
+Ambulatoriais: ${formatarNumero(dadosUf.ambulatoriais)}
+
+Centros Cirúrgicos: ${formatarNumero(dadosUf.centrosCirurgicos)}
+
+Centros Obstétricos: ${formatarNumero(dadosUf.centrosObstetricos)}
+
+Centros Neonatais: ${formatarNumero(dadosUf.centrosNeonatais)}`
                 );
 
                 polygon.dataItem.dataContext.criancas =

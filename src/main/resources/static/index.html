@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoramento Vacinal</title>
+
+    <title>Painel CNES</title>
 
     <link rel="stylesheet" href="css/style.css">
+
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/geodata/brazilLow.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
 </head>
+
 <body>
 
-<h1>Monitoramento Vacinal</h1>
+<h1>Cadastro Nacional de Estabelecimentos de Saúde (CNES)</h1>
 
 <section id="indicadores">
 
@@ -23,124 +27,106 @@
     </div>
 
     <div class="card">
-        <h3>Total de Crianças Monitoradas</h3>
+        <h3>Total de Estabelecimentos</h3>
         <p id="totalRegistros">0</p>
     </div>
 
     <div class="card">
-        <h3>Total de Crianças Com Comprovante</h3>
+        <h3>Atendimento Hospitalar</h3>
         <p id="mediaComComp">0</p>
     </div>
 
     <div class="card">
-        <h3>Total de Crianças Sem Comprovante</h3>
+        <h3>Atendimento Ambulatorial</h3>
         <p id="mediaSemComp">0</p>
     </div>
 
     <div class="card">
-        <h3>Vacina Pneumocócica - Esquema Oportuno</h3>
-        <p id="totalPnccOport">0</p>
+        <h3>Informação do Sistema</h3>
+        <p id="totalPnccOport">CNES</p>
     </div>
 
     <div class="card">
-        <h3>Vacina Meningocócica - Esquema Oportuno</h3>
+        <h3>Centros Neonatais</h3>
         <p id="totalMeningOport">0</p>
     </div>
 
     <div class="card">
-        <h3>Vacina Pneumocócica - Esquema Adequado</h3>
+        <h3>Centros Cirúrgicos</h3>
         <p id="totalPnccAdeq">0</p>
     </div>
 
     <div class="card">
-        <h3>Vacina Meningocócica - Esquema Adequado</h3>
+        <h3>Centros Obstétricos</h3>
         <p id="totalMeningAdeq">0</p>
     </div>
-
 
 </section>
 
 <section>
 
-    <h2>Mapa do Brasil - Crianças Monitoradas por UF</h2>
-    <div id="filtrosMapa">
-
-        <button onclick="alterarMapa('criancas')">
-            Crianças Monitoradas
-        </button>
-
-        <button onclick="alterarMapa('pnccOport')">
-            Pneumo Oportuna
-        </button>
-
-        <button onclick="alterarMapa('pnccAdeq')">
-            Pneumo Adequada
-        </button>
-
-        <button onclick="alterarMapa('meningOport')">
-            Meningo Oportuna
-        </button>
-
-        <button onclick="alterarMapa('meningAdeq')">
-            Meningo Adequada
-        </button>
-
-    </div>
+    <h2>Mapa do Brasil - Estabelecimentos CNES por UF</h2>
 
     <div id="mapaBrasil"></div>
 
 </section>
 
 <section>
-    <h2>Importação CSV</h2>
 
-    <input type="file" id="arquivoCsv">
+    <h2>Sincronização CNES</h2>
 
     <button id="btnImportar">
-        Importar CSV
+        Sincronizar CNES
     </button>
 
     <button id="btnLimpar">
         Limpar Banco
     </button>
+
 </section>
 
 <section>
-    <h2>Consulta</h2>
+
+    <h2>Consulta de Estabelecimentos</h2>
 
     <input
             type="text"
             id="uf"
-            placeholder="UF">
+            placeholder="Código da UF">
 
     <input
             type="text"
             id="municipio"
-            placeholder="Município">
+            placeholder="Nome Fantasia">
 
     <button id="btnPesquisar">
         Pesquisar
     </button>
+
 </section>
 
 <section>
+
     <h2>Resultados</h2>
 
     <table border="1">
 
         <thead>
+
         <tr>
+            <th>CNES</th>
+            <th>Nome Fantasia</th>
             <th>UF</th>
-            <th>Município</th>
-            <th>Domicílios</th>
-            <th>Crianças</th>
+            <th>Tipo Unidade</th>
         </tr>
+
         </thead>
 
         <tbody id="resultado">
         </tbody>
 
     </table>
+
 </section>
 
 <script src="js/script.js"></script>
