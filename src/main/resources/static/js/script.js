@@ -1,25 +1,65 @@
-let metricaMapa = "criancas";
+const mapaUf = {
+    "RO": 11,
+    "AC": 12,
+    "AM": 13,
+    "RR": 14,
+    "PA": 15,
+    "AP": 16,
+    "TO": 17,
+    "MA": 21,
+    "PI": 22,
+    "CE": 23,
+    "RN": 24,
+    "PB": 25,
+    "PE": 26,
+    "AL": 27,
+    "SE": 28,
+    "BA": 29,
+    "MG": 31,
+    "ES": 32,
+    "RJ": 33,
+    "SP": 35,
+    "PR": 41,
+    "SC": 42,
+    "RS": 43,
+    "MS": 50,
+    "MT": 51,
+    "GO": 52,
+    "DF": 53
+};
 
-let dadosMapa = [];
+const ufSigla = {
+    11: "RO",
+    12: "AC",
+    13: "AM",
+    14: "RR",
+    15: "PA",
+    16: "AP",
+    17: "TO",
+    21: "MA",
+    22: "PI",
+    23: "CE",
+    24: "RN",
+    25: "PB",
+    26: "PE",
+    27: "AL",
+    28: "SE",
+    29: "BA",
+    31: "MG",
+    32: "ES",
+    33: "RJ",
+    35: "SP",
+    41: "PR",
+    42: "SC",
+    43: "RS",
+    50: "MS",
+    51: "MT",
+    52: "GO",
+    53: "DF"
+};
 
-let polygonSeriesGlobal;
 let estadoSelecionado = null;
 let corOriginalEstado = null;
-
-
-document
-    .getElementById("btnPesquisar")
-    .addEventListener("click", pesquisar);
-
-document
-    .getElementById("btnLimpar")
-    .addEventListener("click", limparBanco);
-
-document
-    .getElementById("btnImportar")
-    .addEventListener("click", importarArquivo);
-
-carregarIndicadores();
 
 function formatarNumero(valor) {
 
@@ -31,208 +71,89 @@ function formatarNumero(valor) {
         return "0";
     }
 
-    return Number(valor)
-        .toLocaleString("pt-BR");
-}
-
-async function pesquisar() {
-
-    const uf =
-        document.getElementById("uf").value.trim();
-
-    const municipio =
-        document.getElementById("municipio").value.trim();
-
-    let url = "";
-
-    if (municipio !== "") {
-
-        url =
-            `/api/monitoramento/municipio/${encodeURIComponent(municipio)}`;
-
-    } else if (uf !== "") {
-
-        url =
-            `/api/monitoramento/uf/${uf}`;
-
-    } else {
-
-        alert("Informe uma UF ou um Município");
-        return;
-    }
-
-    const resposta = await fetch(url);
-
-    const dados = await resposta.json();
-
-    preencherTabela(dados);
-}
-
-function preencherTabela(dados) {
-
-    const tabela =
-        document.getElementById("resultado");
-
-    tabela.innerHTML = "";
-
-    dados.forEach(item => {
-
-        tabela.innerHTML += `
-            <tr>
-                <td>${item.uf}</td>
-                <td>${item.nomeMunicipio}</td>
-                <td>${item.numeroDomicilios}</td>
-                <td>${item.numeroCriancasResid}</td>
-            </tr>
-        `;
-    });
-}
-
-async function limparBanco() {
-
-    await fetch(
-        "/api/monitoramento/limpar",
-        {
-            method: "DELETE"
-        }
-    );
-
-    document.getElementById("resultado").innerHTML = "";
-
-    alert("Banco limpo com sucesso!");
-}
-
-async function importarArquivo() {
-
-    const arquivo =
-        document.getElementById("arquivoCsv").files[0];
-
-    if (!arquivo) {
-        alert("Selecione um arquivo");
-        return;
-    }
-
-    const botao =
-        document.getElementById("btnImportar");
-
-    botao.disabled = true;
-    botao.innerText = "Importando...";
-
-    const formData = new FormData();
-
-    formData.append("arquivo", arquivo);
-
-    try {
-
-        const resposta = await fetch(
-            "/api/importacao",
-            {
-                method: "POST",
-                body: formData
-            }
-        );
-
-        const mensagem =
-            await resposta.text();
-
-        alert(mensagem);
-
-    } catch (erro) {
-
-        alert("Erro ao importar arquivo");
-
-    } finally {
-
-        botao.disabled = false;
-        botao.innerText = "Importar CSV";
-    }
+    return Number(valor).toLocaleString("pt-BR");
 }
 
 async function carregarIndicadores() {
 
-    const estabelecimentos =
-        await fetch(
-            "/api/cnes/total-estabelecimentos"
-        );
-
-    const totalEstabelecimentos =
-        await estabelecimentos.json();
-
-    document.getElementById("totalRegistros")
-        .innerText = formatarNumero(
-        totalEstabelecimentos
-    );
-
     const hospitalar =
-        await fetch(
-            "/api/cnes/total-hospitalar"
-        );
+        await fetch("/api/cnes/total-hospitalar");
 
-    const totalHospitalar =
-        await hospitalar.json();
-
-    document.getElementById("mediaComComp")
-        .innerText = formatarNumero(
-        totalHospitalar
+    document.getElementById(
+        "totalHospitalar"
+    ).innerText = formatarNumero(
+        await hospitalar.json()
     );
 
     const ambulatorial =
-        await fetch(
-            "/api/cnes/total-ambulatorial"
-        );
+        await fetch("/api/cnes/total-ambulatorial");
 
-    const totalAmbulatorial =
-        await ambulatorial.json();
-
-    document.getElementById("mediaSemComp")
-        .innerText = formatarNumero(
-        totalAmbulatorial
+    document.getElementById(
+        "totalAmbulatorial"
+    ).innerText = formatarNumero(
+        await ambulatorial.json()
     );
 
-    const centroCirurgico =
-        await fetch(
-            "/api/cnes/total-centro-cirurgico"
-        );
+    const cirurgico =
+        await fetch("/api/cnes/total-centro-cirurgico");
 
-    const totalCentroCirurgico =
-        await centroCirurgico.json();
-
-    document.getElementById("totalPnccAdeq")
-        .innerText = formatarNumero(
-        totalCentroCirurgico
+    document.getElementById(
+        "totalCentroCirurgico"
+    ).innerText = formatarNumero(
+        await cirurgico.json()
     );
 
-    const centroObstetrico =
-        await fetch(
-            "/api/cnes/total-centro-obstetrico"
-        );
+    const obstetrico =
+        await fetch("/api/cnes/total-centro-obstetrico");
 
-    const totalCentroObstetrico =
-        await centroObstetrico.json();
-
-    document.getElementById("totalMeningAdeq")
-        .innerText = formatarNumero(
-        totalCentroObstetrico
+    document.getElementById(
+        "totalCentroObstetrico"
+    ).innerText = formatarNumero(
+        await obstetrico.json()
     );
 
-    const centroNeonatal =
-        await fetch(
-            "/api/cnes/total-centro-neonatal"
-        );
+    const neonatal =
+        await fetch("/api/cnes/total-centro-neonatal");
 
-    const totalCentroNeonatal =
-        await centroNeonatal.json();
-
-    document.getElementById("totalMeningOport")
-        .innerText = formatarNumero(
-        totalCentroNeonatal
+    document.getElementById(
+        "totalCentroNeonatal"
+    ).innerText = formatarNumero(
+        await neonatal.json()
     );
-
-    document.getElementById("totalPnccOport")
-        .innerText =
-        "CNES";
 }
-carregarMapa();
+
+async function carregarTabela() {
+
+    const resposta =
+        await fetch("/api/cnes");
+
+    const dados =
+        await resposta.json();
+
+    const tabela =
+        document.getElementById(
+            "resultado"
+        );
+
+    tabela.innerHTML = "";
+
+    dados.slice(0, 100).forEach(item => {
+
+        tabela.innerHTML += `
+            <tr>
+                <td>${item.nomeFantasia ?? ""}</td>
+                <td>${item.esferaAdministrativa ?? ""}</td>
+                <td>${ufSigla[item.codigoUf] ?? item.codigoUf}</td>
+                <td>${item.atendimentoHospitalar ? "Sim" : "Não"}</td>
+                <td>${item.atendimentoAmbulatorial ? "Sim" : "Não"}</td>
+                <td>${item.centroCirurgico ? "Sim" : "Não"}</td>
+                <td>${item.centroObstetrico ? "Sim" : "Não"}</td>
+                <td>${item.centroNeonatal ? "Sim" : "Não"}</td>
+            </tr>
+        `;
+    });
+
+}
 
 async function carregarMapa() {
 
@@ -241,8 +162,6 @@ async function carregarMapa() {
 
     const dados =
         await resposta.json();
-    dadosMapa = dados;
-
 
     const dadosPorUf = {};
 
@@ -262,113 +181,126 @@ async function carregarMapa() {
         const chart =
             root.container.children.push(
                 am5map.MapChart.new(root, {
-                    projection: am5map.geoMercator()
+                    projection:
+                        am5map.geoMercator()
                 })
             );
 
-        polygonSeriesGlobal =
+        const polygonSeries =
             chart.series.push(
-                am5map.MapPolygonSeries.new(root, {
-                    geoJSON: am5geodata_brazilLow
-                })
+                am5map.MapPolygonSeries.new(
+                    root,
+                    {
+                        geoJSON:
+                        am5geodata_brazilLow
+                    }
+                )
             );
 
-        polygonSeriesGlobal.mapPolygons.template.setAll({
-            interactive: true
-        });
+        polygonSeries.mapPolygons
+            .template
+            .setAll({
+                interactive: true
+            });
 
-        polygonSeriesGlobal.events.on("datavalidated", () => {
+        polygonSeries.events.on(
+            "datavalidated",
+            () => {
 
-            polygonSeriesGlobal.mapPolygons.each(polygon => {
+                polygonSeries.mapPolygons.each(
+                    polygon => {
 
-                const uf =
-                    polygon.dataItem?.dataContext?.id
-                        ?.replace("BR-", "");
+                        const sigla =
+                            polygon.dataItem
+                                ?.dataContext
+                                ?.id
+                                ?.replace(
+                                    "BR-",
+                                    ""
+                                );
 
-                const dadosUf =
-                    dadosPorUf[uf];
-                console.log(uf, dadosUf);
+                        const codigoUf =
+                            mapaUf[sigla];
 
-                if (!dadosUf) {
-                    return;
-                }
-                polygon.events.on("click", () => {
-                    if (
-                        estadoSelecionado &&
-                        estadoSelecionado.dataItem.dataContext.id ===
-                        polygon.dataItem.dataContext.id
-                    ) {
-                        estadoSelecionado.set(
-                            "fill",
-                            corOriginalEstado
-                        );
+                        const dadosUf =
+                            dadosPorUf[codigoUf];
 
-                        estadoSelecionado = null;
+                        if (!dadosUf) {
+                            return;
+                        }
+                        polygon.events.on("click", () => {
 
-                        document.getElementById("ufSelecionada")
-                            .innerText = "Brasil";
+                            if (
+                                estadoSelecionado &&
+                                estadoSelecionado === polygon
+                            ) {
 
-                        carregarIndicadores();
+                                estadoSelecionado.set(
+                                    "fill",
+                                    corOriginalEstado
+                                );
 
-                        return;
-                    }
+                                estadoSelecionado = null;
 
-                    if (estadoSelecionado) {
-                        estadoSelecionado.set(
-                            "fill",
-                            corOriginalEstado
-                        );
-                    }
+                                carregarIndicadores();
 
-                    corOriginalEstado =
-                        polygon.get("fill");
+                                return;
+                            }
 
-                    estadoSelecionado = polygon;
+                            if (estadoSelecionado) {
 
-                    polygon.set(
-                        "fill",
-                        am5.color(0xff6b35)
-                    );
+                                estadoSelecionado.set(
+                                    "fill",
+                                    corOriginalEstado
+                                );
+                            }
 
-                    document.getElementById("ufSelecionada")
-                        .innerText = dadosUf.codigoUf;
+                            corOriginalEstado =
+                                polygon.get("fill");
 
-                    document.getElementById("totalRegistros")
-                        .innerText = formatarNumero(
-                        dadosUf.estabelecimentos
-                    );
+                            estadoSelecionado =
+                                polygon;
 
-                    document.getElementById("mediaComComp")
-                        .innerText = formatarNumero(
-                        dadosUf.hospitalares
-                    );
+                            polygon.set(
+                                "fill",
+                                am5.color(0xff6b35)
+                            );
 
-                    document.getElementById("mediaSemComp")
-                        .innerText = formatarNumero(
-                        dadosUf.ambulatoriais
-                    );
+                            document.getElementById(
+                                "totalHospitalar"
+                            ).innerText = formatarNumero(
+                                dadosUf.hospitalares
+                            );
 
-                    document.getElementById("totalPnccAdeq")
-                        .innerText = formatarNumero(
-                        dadosUf.centrosCirurgicos
-                    );
+                            document.getElementById(
+                                "totalAmbulatorial"
+                            ).innerText = formatarNumero(
+                                dadosUf.ambulatoriais
+                            );
 
-                    document.getElementById("totalMeningAdeq")
-                        .innerText = formatarNumero(
-                        dadosUf.centrosObstetricos
-                    );
+                            document.getElementById(
+                                "totalCentroCirurgico"
+                            ).innerText = formatarNumero(
+                                dadosUf.centrosCirurgicos
+                            );
 
-                    document.getElementById("totalMeningOport")
-                        .innerText = formatarNumero(
-                        dadosUf.centrosNeonatais
-                    );
+                            document.getElementById(
+                                "totalCentroObstetrico"
+                            ).innerText = formatarNumero(
+                                dadosUf.centrosObstetricos
+                            );
 
-                    document.getElementById("totalPnccOport")
-                        .innerText = "CNES";
-                });
-                polygon.set(
-                    "tooltipText",
-                    `${polygon.dataItem.dataContext.name}
+                            document.getElementById(
+                                "totalCentroNeonatal"
+                            ).innerText = formatarNumero(
+                                dadosUf.centrosNeonatais
+                            );
+
+                        });
+
+                        polygon.set(
+                            "tooltipText",
+                            `${polygon.dataItem.dataContext.name}
 
 Estabelecimentos: ${formatarNumero(dadosUf.estabelecimentos)}
 
@@ -381,28 +313,17 @@ Centros Cirúrgicos: ${formatarNumero(dadosUf.centrosCirurgicos)}
 Centros Obstétricos: ${formatarNumero(dadosUf.centrosObstetricos)}
 
 Centros Neonatais: ${formatarNumero(dadosUf.centrosNeonatais)}`
+                        );
+
+                    }
                 );
-
-                polygon.dataItem.dataContext.criancas =
-                    dadosUf.criancas;
-
-                polygon.dataItem.dataContext.municipios =
-                    dadosUf.municipios;
-
-                polygon.dataItem.dataContext.pnccAdeq =
-                    dadosUf.pnccAdeq;
-
-                polygon.dataItem.dataContext.pnccOport =
-                    dadosUf.pnccOport;
-
-                polygon.dataItem.dataContext.meningAdeq =
-                    dadosUf.meningAdeq;
-
-                polygon.dataItem.dataContext.meningOport =
-                    dadosUf.meningOport;
-            });
-
-        });
+            }
+        );
 
     });
+
 }
+
+carregarIndicadores();
+carregarTabela();
+carregarMapa();

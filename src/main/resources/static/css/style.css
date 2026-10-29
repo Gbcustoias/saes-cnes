@@ -1,5 +1,6 @@
 body {
     font-family: Arial, sans-serif;
+    background: #f5f7fa;
     margin: 20px;
 }
 
@@ -18,17 +19,17 @@ td {
 }
 
 #indicadores {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 20px;
     margin-bottom: 30px;
 }
 
 .card {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 15px;
-    min-width: 180px;
-    text-align: center;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .card h3 {

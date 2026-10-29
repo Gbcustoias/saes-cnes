@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Painel CNES</title>
+    <title>Observatório Nacional de Estabelecimentos de Saúde</title>
 
     <link rel="stylesheet" href="css/style.css">
 
@@ -17,55 +17,40 @@
 
 <body>
 
-<h1>Cadastro Nacional de Estabelecimentos de Saúde (CNES)</h1>
+<h1>Observatório Nacional de Estabelecimentos de Saúde</h1>
 
 <section id="indicadores">
 
     <div class="card">
-        <h3>UF Selecionada</h3>
-        <p id="ufSelecionada">Brasil</p>
-    </div>
-
-    <div class="card">
-        <h3>Total de Estabelecimentos</h3>
-        <p id="totalRegistros">0</p>
-    </div>
-
-    <div class="card">
         <h3>Atendimento Hospitalar</h3>
-        <p id="mediaComComp">0</p>
+        <p id="totalHospitalar">0</p>
     </div>
 
     <div class="card">
         <h3>Atendimento Ambulatorial</h3>
-        <p id="mediaSemComp">0</p>
-    </div>
-
-    <div class="card">
-        <h3>Informação do Sistema</h3>
-        <p id="totalPnccOport">CNES</p>
-    </div>
-
-    <div class="card">
-        <h3>Centros Neonatais</h3>
-        <p id="totalMeningOport">0</p>
+        <p id="totalAmbulatorial">0</p>
     </div>
 
     <div class="card">
         <h3>Centros Cirúrgicos</h3>
-        <p id="totalPnccAdeq">0</p>
+        <p id="totalCentroCirurgico">0</p>
     </div>
 
     <div class="card">
         <h3>Centros Obstétricos</h3>
-        <p id="totalMeningAdeq">0</p>
+        <p id="totalCentroObstetrico">0</p>
+    </div>
+
+    <div class="card">
+        <h3>Centros Neonatais</h3>
+        <p id="totalCentroNeonatal">0</p>
     </div>
 
 </section>
 
 <section>
 
-    <h2>Mapa do Brasil - Estabelecimentos CNES por UF</h2>
+    <h2>Distribuição Geográfica dos Estabelecimentos de Saúde</h2>
 
     <div id="mapaBrasil"></div>
 
@@ -73,51 +58,20 @@
 
 <section>
 
-    <h2>Sincronização CNES</h2>
-
-    <button id="btnImportar">
-        Sincronizar CNES
-    </button>
-
-    <button id="btnLimpar">
-        Limpar Banco
-    </button>
-
-</section>
-
-<section>
-
-    <h2>Consulta de Estabelecimentos</h2>
-
-    <input
-            type="text"
-            id="uf"
-            placeholder="Código da UF">
-
-    <input
-            type="text"
-            id="municipio"
-            placeholder="Nome Fantasia">
-
-    <button id="btnPesquisar">
-        Pesquisar
-    </button>
-
-</section>
-
-<section>
-
-    <h2>Resultados</h2>
+    <h2>Estabelecimentos Encontrados</h2>
 
     <table border="1">
 
         <thead>
-
         <tr>
-            <th>CNES</th>
-            <th>Nome Fantasia</th>
+            <th>Nome</th>
+            <th>Esfera Administrativa</th>
             <th>UF</th>
-            <th>Tipo Unidade</th>
+            <th>Hospitalar</th>
+            <th>Ambulatorial</th>
+            <th>Centro Cirúrgico</th>
+            <th>Centro Obstétrico</th>
+            <th>Centro Neonatal</th>
         </tr>
 
         </thead>
@@ -132,4 +86,5 @@
 <script src="js/script.js"></script>
 
 </body>
+
 </html>
