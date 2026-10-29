@@ -1,3 +1,7 @@
+let paginaAtual = 1;
+const registrosPorPagina = 20;
+let todosOsDados = [];
+
 const mapaUf = {
     "RO": 11,
     "AC": 12,
@@ -127,31 +131,10 @@ async function carregarTabela() {
     const resposta =
         await fetch("/api/cnes");
 
-    const dados =
+    todosOsDados =
         await resposta.json();
 
-    const tabela =
-        document.getElementById(
-            "resultado"
-        );
-
-    tabela.innerHTML = "";
-
-    dados.slice(0, 100).forEach(item => {
-
-        tabela.innerHTML += `
-            <tr>
-                <td>${item.nomeFantasia ?? ""}</td>
-                <td>${item.esferaAdministrativa ?? ""}</td>
-                <td>${ufSigla[item.codigoUf] ?? item.codigoUf}</td>
-                <td>${item.atendimentoHospitalar ? "Sim" : "Não"}</td>
-                <td>${item.atendimentoAmbulatorial ? "Sim" : "Não"}</td>
-                <td>${item.centroCirurgico ? "Sim" : "Não"}</td>
-                <td>${item.centroObstetrico ? "Sim" : "Não"}</td>
-                <td>${item.centroNeonatal ? "Sim" : "Não"}</td>
-            </tr>
-        `;
-    });
+    renderizarTabela();
 
 }
 
@@ -323,7 +306,88 @@ Centros Neonatais: ${formatarNumero(dadosUf.centrosNeonatais)}`
     });
 
 }
+function proximaPagina() {
 
+    const totalPaginas =
+        Math.ceil(
+            todosOsDados.length /
+            registrosPorPagina
+        );
+
+    if (
+        paginaAtual < totalPaginas
+    ) {
+
+        paginaAtual++;
+
+        renderizarTabela();
+
+        atualizarInfoPagina();
+    }
+}
+
+function paginaAnterior() {
+
+    if (paginaAtual > 1) {
+
+        paginaAtual--;
+
+        renderizarTabela();
+
+        atualizarInfoPagina();
+    }
+}
+
+function atualizarInfoPagina() {
+
+    const totalPaginas =
+        Math.ceil(
+            todosOsDados.length /
+            registrosPorPagina
+        );
+
+    document.getElementById(
+        "paginaInfo"
+    ).innerText =
+        `Página ${paginaAtual} de ${totalPaginas}`;
+}
 carregarIndicadores();
 carregarTabela();
+
+function renderizarTabela() {
+
+    const tabela =
+        document.getElementById(
+            "resultado"
+        );
+
+    tabela.innerHTML = "";
+
+    const inicio =
+        (paginaAtual - 1)
+        * registrosPorPagina;
+
+    const fim =
+        inicio + registrosPorPagina;
+
+    todosOsDados
+        .slice(inicio, fim)
+        .forEach(item => {
+
+            tabela.innerHTML += `
+                <tr>
+                    <td>${item.nomeFantasia ?? ""}</td>
+                    <td>${item.esferaAdministrativa ?? ""}</td>
+                    <td>${ufSigla[item.codigoUf] ?? item.codigoUf}</td>
+                    <td>${item.atendimentoHospitalar ? "Sim" : "Não"}</td>
+                    <td>${item.atendimentoAmbulatorial ? "Sim" : "Não"}</td>
+                    <td>${item.centroCirurgico ? "Sim" : "Não"}</td>
+                    <td>${item.centroObstetrico ? "Sim" : "Não"}</td>
+                    <td>${item.centroNeonatal ? "Sim" : "Não"}</td>
+                </tr>
+            `;
+        });
+
+}
+
 carregarMapa();
