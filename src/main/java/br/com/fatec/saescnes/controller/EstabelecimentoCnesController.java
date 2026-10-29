@@ -91,4 +91,11 @@ public class EstabelecimentoCnesController {
 
         return service.dashboardPorUf();
     }
+    @DeleteMapping("/{codigoCnes}")
+    public void excluir(
+            @PathVariable Long codigoCnes) {
+
+        service.excluir(codigoCnes);
+
+    }
 }

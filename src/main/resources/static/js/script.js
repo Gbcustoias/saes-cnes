@@ -1,6 +1,7 @@
 let paginaAtual = 1;
 const registrosPorPagina = 20;
 let todosOsDados = [];
+let dadosOriginais = [];
 
 const mapaUf = {
     "RO": 11,
@@ -131,8 +132,11 @@ async function carregarTabela() {
     const resposta =
         await fetch("/api/cnes");
 
-    todosOsDados =
+    dadosOriginais =
         await resposta.json();
+
+    todosOsDados =
+        [...dadosOriginais];
 
     renderizarTabela();
 
@@ -388,6 +392,61 @@ function renderizarTabela() {
             `;
         });
 
+    atualizarInfoPagina();
+}
+function filtrarTabela() {
+
+    const nome =
+        document.getElementById(
+            "filtroNome"
+        ).value
+            .toLowerCase();
+
+    const uf =
+        document.getElementById(
+            "filtroUf"
+        ).value;
+
+    todosOsDados =
+        dadosOriginais.filter(item => {
+
+            const atendeNome =
+                item.nomeFantasia
+                    ?.toLowerCase()
+                    .includes(nome);
+
+            const atendeUf =
+                uf === "" ||
+                item.codigoUf === Number(uf);
+
+            return (
+                atendeNome &&
+                atendeUf
+            );
+        });
+
+    paginaAtual = 1;
+
+    renderizarTabela();
+}
+function limparFiltros() {
+
+    document.getElementById(
+        "filtroNome"
+    ).value = "";
+
+    document.getElementById(
+        "filtroUf"
+    ).value = "";
+
+    todosOsDados =
+        [...dadosOriginais];
+
+    paginaAtual = 1;
+
+    renderizarTabela();
 }
 
+carregarIndicadores();
+carregarTabela();
 carregarMapa();

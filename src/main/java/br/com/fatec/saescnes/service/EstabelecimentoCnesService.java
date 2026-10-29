@@ -101,4 +101,10 @@ public class EstabelecimentoCnesService {
 
         return resultado;
     }
+    public void excluir(Long codigoCnes) {
+
+        repository.deleteById(codigoCnes);
+
+    }
+
 }
