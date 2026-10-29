@@ -282,10 +282,10 @@ public class ImportacaoService {
                             totalImportado
             );
 
-            if (totalImportado >= 1000) {
+            if (totalImportado >= 10000) {
 
                 System.out.println(
-                        "LIMITE DE 1000 REGISTROS ATINGIDO"
+                        "LIMITE DE 10000 REGISTROS ATINGIDO"
                 );
 
                 break;

@@ -2,53 +2,63 @@ package br.com.fatec.saescnes.model;
 
 public class DashboardUfDTO {
 
-    private String uf;
-    private Long criancas;
-    private Long municipios;
-    private Long pnccAdeq;
-    private Long pnccOport;
-    private Long meningAdeq;
-    private Long meningOport;
-    private Long comComp;
-    private Long semComp;
+    private Integer codigoUf;
 
+    private Long estabelecimentos;
+
+    private Long hospitalares;
+
+    private Long ambulatoriais;
+
+    private Long centrosCirurgicos;
+
+    private Long centrosObstetricos;
+
+    private Long centrosNeonatais;
 
     public DashboardUfDTO(
-            String uf,
-            Long criancas,
-            Long municipios,
-            Long pnccAdeq,
-            Long pnccOport,
-            Long meningAdeq,
-            Long meningOport,
-            Long comComp,
-            Long semComp) {
+            Integer codigoUf,
+            Long estabelecimentos,
+            Long hospitalares,
+            Long ambulatoriais,
+            Long centrosCirurgicos,
+            Long centrosObstetricos,
+            Long centrosNeonatais) {
 
-        this.uf = uf;
-        this.criancas = criancas;
-        this.municipios = municipios;
-        this.pnccAdeq = pnccAdeq;
-        this.pnccOport = pnccOport;
-        this.meningAdeq = meningAdeq;
-        this.meningOport = meningOport;
-        this.comComp = comComp;
-        this.semComp = semComp;
+        this.codigoUf = codigoUf;
+        this.estabelecimentos = estabelecimentos;
+        this.hospitalares = hospitalares;
+        this.ambulatoriais = ambulatoriais;
+        this.centrosCirurgicos = centrosCirurgicos;
+        this.centrosObstetricos = centrosObstetricos;
+        this.centrosNeonatais = centrosNeonatais;
     }
 
-    public String getUf() { return uf; }
+    public Integer getCodigoUf() {
+        return codigoUf;
+    }
 
-    public Long getCriancas() { return criancas; }
+    public Long getEstabelecimentos() {
+        return estabelecimentos;
+    }
 
-    public Long getMunicipios() { return municipios; }
+    public Long getHospitalares() {
+        return hospitalares;
+    }
 
-    public Long getPnccAdeq() { return pnccAdeq; }
+    public Long getAmbulatoriais() {
+        return ambulatoriais;
+    }
 
-    public Long getPnccOport() { return pnccOport; }
+    public Long getCentrosCirurgicos() {
+        return centrosCirurgicos;
+    }
 
-    public Long getMeningAdeq() { return meningAdeq; }
+    public Long getCentrosObstetricos() {
+        return centrosObstetricos;
+    }
 
-    public Long getMeningOport() { return meningOport; }
-    public Long getComComp() { return comComp; }
-
-    public Long getSemComp() { return semComp; }
+    public Long getCentrosNeonatais() {
+        return centrosNeonatais;
+    }
 }

@@ -3,6 +3,9 @@ package br.com.fatec.saescnes.service;
 import br.com.fatec.saescnes.model.EstabelecimentoCnes;
 import br.com.fatec.saescnes.repository.EstabelecimentoCnesRepository;
 import org.springframework.stereotype.Service;
+import br.com.fatec.saescnes.model.DashboardUfDTO;
+import java.util.ArrayList;
+
 
 import java.util.List;
 
@@ -72,5 +75,30 @@ public class EstabelecimentoCnesService {
 
     public List<Object[]> totalPorUf() {
         return repository.totalPorUf();
+    }
+    public List<DashboardUfDTO> dashboardPorUf() {
+
+        List<Object[]> dados =
+                repository.dashboardPorUf();
+
+        List<DashboardUfDTO> resultado =
+                new ArrayList<>();
+
+        for (Object[] linha : dados) {
+
+            resultado.add(
+                    new DashboardUfDTO(
+                            ((Number) linha[0]).intValue(),
+                            ((Number) linha[1]).longValue(),
+                            ((Number) linha[2]).longValue(),
+                            ((Number) linha[3]).longValue(),
+                            ((Number) linha[4]).longValue(),
+                            ((Number) linha[5]).longValue(),
+                            ((Number) linha[6]).longValue()
+                    )
+            );
+        }
+
+        return resultado;
     }
 }

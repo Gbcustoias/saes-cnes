@@ -74,4 +74,19 @@ public interface EstabelecimentoCnesRepository
            ORDER BY e.codigoUf
            """)
     List<Object[]> totalPorUf();
+
+    @Query("""
+       SELECT
+           e.codigoUf,
+           COUNT(e),
+           COALESCE(SUM(e.atendimentoHospitalar),0),
+           COALESCE(SUM(e.atendimentoAmbulatorial),0),
+           COALESCE(SUM(e.centroCirurgico),0),
+           COALESCE(SUM(e.centroObstetrico),0),
+           COALESCE(SUM(e.centroNeonatal),0)
+       FROM EstabelecimentoCnes e
+       GROUP BY e.codigoUf
+       ORDER BY e.codigoUf
+       """)
+    List<Object[]> dashboardPorUf();
 }

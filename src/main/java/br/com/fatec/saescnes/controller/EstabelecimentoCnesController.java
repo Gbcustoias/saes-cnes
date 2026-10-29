@@ -3,6 +3,7 @@ package br.com.fatec.saescnes.controller;
 import br.com.fatec.saescnes.model.EstabelecimentoCnes;
 import br.com.fatec.saescnes.service.EstabelecimentoCnesService;
 import org.springframework.web.bind.annotation.*;
+import br.com.fatec.saescnes.model.DashboardUfDTO;
 
 import java.util.List;
 
@@ -84,5 +85,10 @@ public class EstabelecimentoCnesController {
     public List<Object[]> mapa() {
 
         return service.totalPorUf();
+    }
+    @GetMapping("/dashboard-uf")
+    public List<DashboardUfDTO> dashboardPorUf() {
+
+        return service.dashboardPorUf();
     }
 }
