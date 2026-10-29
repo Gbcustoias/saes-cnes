@@ -106,5 +106,24 @@ public class EstabelecimentoCnesService {
         repository.deleteById(codigoCnes);
 
     }
+    public EstabelecimentoCnes buscarPorCodigo(
+            Long codigoCnes) {
+
+        return repository
+                .findByCodigoCnes(codigoCnes)
+                .orElseThrow();
+    }
+    public EstabelecimentoCnes atualizar(
+            Long codigoCnes,
+            EstabelecimentoCnes atualizado) {
+
+        atualizado.setCodigoCnes(
+                codigoCnes
+        );
+
+        return repository.save(
+                atualizado
+        );
+    }
 
 }

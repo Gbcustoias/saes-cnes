@@ -98,4 +98,22 @@ public class EstabelecimentoCnesController {
         service.excluir(codigoCnes);
 
     }
+    @GetMapping("/{codigoCnes}")
+    public EstabelecimentoCnes buscarPorCodigo(
+            @PathVariable Long codigoCnes) {
+
+        return service.buscarPorCodigo(
+                codigoCnes
+        );
+    }
+    @PutMapping("/{codigoCnes}")
+    public EstabelecimentoCnes atualizar(
+            @PathVariable Long codigoCnes,
+            @RequestBody EstabelecimentoCnes atualizado) {
+
+        return service.atualizar(
+                codigoCnes,
+                atualizado
+        );
+    }
 }

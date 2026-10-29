@@ -3,6 +3,7 @@ package br.com.fatec.saescnes.repository;
 import br.com.fatec.saescnes.model.EstabelecimentoCnes;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import java.util.Optional;
 
 import java.util.List;
 
@@ -89,4 +90,8 @@ public interface EstabelecimentoCnesRepository
        ORDER BY e.codigoUf
        """)
     List<Object[]> dashboardPorUf();
+
+    Optional<EstabelecimentoCnes> findByCodigoCnes(
+            Long codigoCnes
+    );
 }
