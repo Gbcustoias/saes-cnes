@@ -29,9 +29,11 @@ public class EstabelecimentoCnesController {
     }
 
     @GetMapping
-    public List<EstabelecimentoCnes> listarTodos() {
+    public ResponseEntity<List<EstabelecimentoCnes>> listarTodos() {
 
-        return service.listarTodos();
+        return ResponseEntity.ok(
+                service.listarTodos()
+        );
     }
 
     @GetMapping("/uf/{codigoUf}")
@@ -173,7 +175,7 @@ public class EstabelecimentoCnesController {
                 .body(salvo);
     }
     @GetMapping("/filtro")
-    public List<EstabelecimentoCnes> filtrar(
+    public ResponseEntity<List<EstabelecimentoCnes>> filtrar(
 
             @RequestParam(required = false, defaultValue = "")
             String nome,
@@ -181,9 +183,11 @@ public class EstabelecimentoCnesController {
             @RequestParam(required = false)
             Integer uf) {
 
-        return service.filtrar(
-                nome,
-                uf
+        return ResponseEntity.ok(
+                service.filtrar(
+                        nome,
+                        uf
+                )
         );
     }
     @PostMapping("/importar")
