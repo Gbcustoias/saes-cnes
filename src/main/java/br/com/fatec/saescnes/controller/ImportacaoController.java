@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/cnes")
+@RequestMapping("/api/estabelecimentos")
 public class ImportacaoController {
 
     private final ImportacaoService service;

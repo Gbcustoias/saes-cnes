@@ -8,7 +8,7 @@ import br.com.fatec.saescnes.model.DashboardUfDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cnes")
+@RequestMapping("/api/estabelecimentos")
 public class EstabelecimentoCnesController {
 
     private final EstabelecimentoCnesService service;
@@ -114,6 +114,14 @@ public class EstabelecimentoCnesController {
         return service.atualizar(
                 codigoCnes,
                 atualizado
+        );
+    }
+    @PostMapping
+    public EstabelecimentoCnes criar(
+            @RequestBody EstabelecimentoCnes estabelecimento) {
+
+        return service.criar(
+                estabelecimento
         );
     }
 }

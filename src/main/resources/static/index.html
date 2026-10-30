@@ -111,6 +111,10 @@
             Limpar
         </button>
 
+        <button onclick="abrirModalEditar()">
+            Alterar Registro
+        </button>
+
     </div>
 
     <table border="1">
@@ -152,6 +156,217 @@
     </div>
 
 </section>
+
+<div id="modalEditar" class="modal">
+
+    <div class="modal-content">
+
+        <h2>Adicionar ou Alterar Registros</h2>
+
+        <div id="filtrosTabela">
+
+            <input
+                    type="text"
+                    id="buscaRegistro"
+                    placeholder="Nome">
+
+            <button onclick="buscarRegistrosModal()">
+                Buscar
+            </button>
+
+        </div>
+
+        <h3>Resultados da Busca</h3>
+
+        <table>
+
+            <thead>
+
+            <tr>
+                <th>Nome</th>
+                <th>Esfera Administrativa</th>
+                <th>UF</th>
+                <th>Hospitalar</th>
+                <th>Ambulatorial</th>
+                <th>Centro Cirúrgico</th>
+                <th>Centro Obstétrico</th>
+                <th>Centro Neonatal</th>
+            </tr>
+
+            </thead>
+
+            <tbody id="resultadoBuscaModal">
+            </tbody>
+
+        </table>
+
+        <div id="paginacaoModal">
+
+            <button onclick="paginaAnteriorModal()">
+                ← Anterior
+            </button>
+
+            <span id="paginaInfoModal">
+                Página 1
+            </span>
+
+            <button onclick="proximaPaginaModal()">
+                Próxima →
+            </button>
+
+        </div>
+
+        <hr>
+
+        <h3>Dados para Alteração</h3>
+
+        <div class="campoEdicao">
+
+            <label for="editarNomeFantasia">
+                Nome Fantasia
+            </label>
+
+            <input
+                    type="text"
+                    id="editarNomeFantasia">
+
+        </div>
+
+        <div class="campoEdicao">
+
+            <label for="editarEsferaAdministrativa">
+                Esfera Administrativa
+            </label>
+
+            <input
+                    type="text"
+                    id="editarEsferaAdministrativa">
+
+        </div>
+
+        <div class="campoEdicao">
+
+            <label for="editarUf">
+                UF
+            </label>
+
+            <select id="editarUf">
+
+                <option value="11">RO</option>
+                <option value="12">AC</option>
+                <option value="13">AM</option>
+                <option value="14">RR</option>
+                <option value="15">PA</option>
+                <option value="16">AP</option>
+                <option value="17">TO</option>
+                <option value="21">MA</option>
+                <option value="22">PI</option>
+                <option value="23">CE</option>
+                <option value="24">RN</option>
+                <option value="25">PB</option>
+                <option value="26">PE</option>
+                <option value="27">AL</option>
+                <option value="28">SE</option>
+                <option value="29">BA</option>
+                <option value="31">MG</option>
+                <option value="32">ES</option>
+                <option value="33">RJ</option>
+                <option value="35">SP</option>
+                <option value="41">PR</option>
+                <option value="42">SC</option>
+                <option value="43">RS</option>
+                <option value="50">MS</option>
+                <option value="51">MT</option>
+                <option value="52">GO</option>
+                <option value="53">DF</option>
+
+            </select>
+
+        </div>
+
+        <div class="campoCheckbox">
+
+            <label>
+                <input
+                        type="checkbox"
+                        id="editarHospitalar">
+
+                Atendimento Hospitalar
+            </label>
+
+        </div>
+
+        <div class="campoCheckbox">
+
+            <label>
+                <input
+                        type="checkbox"
+                        id="editarAmbulatorial">
+
+                Atendimento Ambulatorial
+            </label>
+
+        </div>
+
+        <div class="campoCheckbox">
+
+            <label>
+                <input
+                        type="checkbox"
+                        id="editarCentroCirurgico">
+
+                Centro Cirúrgico
+            </label>
+
+        </div>
+
+        <div class="campoCheckbox">
+
+            <label>
+                <input
+                        type="checkbox"
+                        id="editarCentroObstetrico">
+
+                Centro Obstétrico
+            </label>
+
+        </div>
+
+        <div class="campoCheckbox">
+
+            <label>
+                <input
+                        type="checkbox"
+                        id="editarCentroNeonatal">
+
+                Centro Neonatal
+            </label>
+
+        </div>
+
+        <div class="acoesModal">
+
+            <button onclick="salvarRegistroModal()">
+                Salvar
+            </button>
+
+            <button
+                    class="btnExcluir"
+                    onclick="excluirRegistro()">
+                Excluir Registro
+            </button>
+
+            <button onclick="fecharModalEditar()">
+                Fechar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="mensagemSistema"></div>
 
 <script src="js/script.js"></script>
 

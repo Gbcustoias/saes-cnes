@@ -2,6 +2,14 @@ let paginaAtual = 1;
 const registrosPorPagina = 20;
 let todosOsDados = [];
 let dadosOriginais = [];
+let resultadosBuscaModal = [];
+
+let paginaBuscaModal = 1;
+
+const registrosPorPaginaModal = 10;
+
+let codigoCnesSelecionado = null;
+
 
 const mapaUf = {
     "RO": 11,
@@ -82,7 +90,7 @@ function formatarNumero(valor) {
 async function carregarIndicadores() {
 
     const hospitalar =
-        await fetch("/api/cnes/total-hospitalar");
+        await fetch("/api/estabelecimentos/total-hospitalar");
 
     document.getElementById(
         "totalHospitalar"
@@ -91,7 +99,7 @@ async function carregarIndicadores() {
     );
 
     const ambulatorial =
-        await fetch("/api/cnes/total-ambulatorial");
+        await fetch("/api/estabelecimentos/total-ambulatorial");
 
     document.getElementById(
         "totalAmbulatorial"
@@ -100,7 +108,7 @@ async function carregarIndicadores() {
     );
 
     const cirurgico =
-        await fetch("/api/cnes/total-centro-cirurgico");
+        await fetch("/api/estabelecimentos/total-centro-cirurgico");
 
     document.getElementById(
         "totalCentroCirurgico"
@@ -109,7 +117,7 @@ async function carregarIndicadores() {
     );
 
     const obstetrico =
-        await fetch("/api/cnes/total-centro-obstetrico");
+        await fetch("/api/estabelecimentos/total-centro-obstetrico");
 
     document.getElementById(
         "totalCentroObstetrico"
@@ -118,7 +126,7 @@ async function carregarIndicadores() {
     );
 
     const neonatal =
-        await fetch("/api/cnes/total-centro-neonatal");
+        await fetch("/api/estabelecimentos/total-centro-neonatal");
 
     document.getElementById(
         "totalCentroNeonatal"
@@ -130,7 +138,7 @@ async function carregarIndicadores() {
 async function carregarTabela() {
 
     const resposta =
-        await fetch("/api/cnes");
+        await fetch("/api/estabelecimentos");
 
     dadosOriginais =
         await resposta.json();
@@ -141,11 +149,213 @@ async function carregarTabela() {
     renderizarTabela();
 
 }
+function abrirModalEditar() {
 
+    document.getElementById(
+        "modalEditar"
+    ).style.display = "block";
+
+}
+
+function fecharModalEditar() {
+
+
+    document.getElementById(
+        "modalEditar"
+    ).style.display = "none";
+
+}
+async function selecionarRegistro(
+    codigoCnes
+) {
+
+    const resposta =
+        await fetch(
+            `/api/estabelecimentos/${codigoCnes}`
+        );
+
+    const item =
+        await resposta.json();
+
+    document.getElementById(
+        "editarNomeFantasia"
+    ).value =
+        item.nomeFantasia ?? "";
+
+    document.getElementById(
+        "editarEsferaAdministrativa"
+    ).value =
+        item.esferaAdministrativa ?? "";
+
+    document.getElementById(
+        "editarUf"
+    ).value =
+        item.codigoUf;
+
+    document.getElementById(
+        "editarHospitalar"
+    ).checked =
+        item.atendimentoHospitalar === 1;
+
+    document.getElementById(
+        "editarAmbulatorial"
+    ).checked =
+        item.atendimentoAmbulatorial === 1;
+
+    document.getElementById(
+        "editarCentroCirurgico"
+    ).checked =
+        item.centroCirurgico === 1;
+
+    document.getElementById(
+        "editarCentroObstetrico"
+    ).checked =
+        item.centroObstetrico === 1;
+
+    document.getElementById(
+        "editarCentroNeonatal"
+    ).checked =
+        item.centroNeonatal === 1;
+
+    codigoCnesSelecionado =
+        codigoCnes;
+}
+async function salvarRegistroModal() {
+
+    const body = {
+
+        nomeFantasia:
+        document.getElementById(
+            "editarNomeFantasia"
+        ).value,
+
+        esferaAdministrativa:
+        document.getElementById(
+            "editarEsferaAdministrativa"
+        ).value,
+
+        codigoUf:
+            Number(
+                document.getElementById(
+                    "editarUf"
+                ).value
+            ),
+
+        atendimentoHospitalar:
+            document.getElementById(
+                "editarHospitalar"
+            ).checked ? 1 : 0,
+
+        atendimentoAmbulatorial:
+            document.getElementById(
+                "editarAmbulatorial"
+            ).checked ? 1 : 0,
+
+        centroCirurgico:
+            document.getElementById(
+                "editarCentroCirurgico"
+            ).checked ? 1 : 0,
+
+        centroObstetrico:
+            document.getElementById(
+                "editarCentroObstetrico"
+            ).checked ? 1 : 0,
+
+        centroNeonatal:
+            document.getElementById(
+                "editarCentroNeonatal"
+            ).checked ? 1 : 0
+    };
+
+    const url =
+        codigoCnesSelecionado
+            ? `/api/estabelecimentos/${codigoCnesSelecionado}`
+            : "/api/estabelecimentos";
+
+    const metodo =
+        codigoCnesSelecionado
+            ? "PUT"
+            : "POST";
+
+    const resposta =
+        await fetch(
+            url,
+            {
+                method: metodo,
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+                body:
+                    JSON.stringify(body)
+            }
+        );
+
+    if (resposta.ok) {
+
+        alert(
+            "Registro atualizado com sucesso"
+        );
+
+        carregarTabela();
+
+    } else {
+
+        alert(
+            "Erro ao atualizar registro"
+        );
+    }
+}
+
+async function excluirRegistro() {
+
+    if (!codigoCnesSelecionado) {
+
+        alert(
+            "Selecione um registro"
+        );
+
+        return;
+    }
+
+    const confirmar =
+        confirm(
+            "Deseja realmente excluir o registro?"
+        );
+
+    if (!confirmar) {
+        return;
+    }
+
+    const resposta =
+        await fetch(
+            `/api/estabelecimentos/${codigoCnesSelecionado}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+    if (resposta.ok) {
+
+        alert(
+            "Registro excluído com sucesso"
+        );
+
+        fecharModalEditar();
+
+        carregarTabela();
+
+    } else {
+
+        alert(
+            "Erro ao excluir registro"
+        );
+    }
+}
 async function carregarMapa() {
 
     const resposta =
-        await fetch("/api/cnes/dashboard-uf");
+        await fetch("/api/estabelecimentos/dashboard-uf");
 
     const dados =
         await resposta.json();
@@ -446,7 +656,135 @@ function limparFiltros() {
 
     renderizarTabela();
 }
+async function buscarRegistrosModal() {
 
+    const termo =
+        document.getElementById(
+            "buscaRegistro"
+        ).value.trim();
+
+    if (termo === "") {
+        return;
+    }
+
+    if (!isNaN(termo)) {
+
+        const resposta =
+            await fetch(
+                `/api/estabelecimentos/${termo}`
+            );
+
+        const registro =
+            await resposta.json();
+
+        resultadosBuscaModal =
+            [registro];
+
+    } else {
+
+        const resposta =
+            await fetch(
+                `/api/estabelecimentos/nome/${encodeURIComponent(termo)}`
+            );
+
+        resultadosBuscaModal =
+            await resposta.json();
+    }
+
+    paginaBuscaModal = 1;
+
+    renderizarTabelaModal();
+}
+
+function renderizarTabelaModal() {
+
+    const tabela =
+        document.getElementById(
+            "resultadoBuscaModal"
+        );
+
+    tabela.innerHTML = "";
+
+    const inicio =
+        (paginaBuscaModal - 1)
+        * registrosPorPaginaModal;
+
+    const fim =
+        inicio +
+        registrosPorPaginaModal;
+
+    resultadosBuscaModal
+        .slice(inicio, fim)
+        .forEach(item => {
+
+            tabela.innerHTML += `
+                <tr onclick="selecionarRegistro(${item.codigoCnes})">
+
+                    <td>${item.nomeFantasia ?? ""}</td>
+
+                    <td>${item.esferaAdministrativa ?? ""}</td>
+
+                    <td>${ufSigla[item.codigoUf] ?? item.codigoUf}</td>
+
+                    <td>${item.atendimentoHospitalar ? "Sim" : "Não"}</td>
+
+                    <td>${item.atendimentoAmbulatorial ? "Sim" : "Não"}</td>
+
+                    <td>${item.centroCirurgico ? "Sim" : "Não"}</td>
+
+                    <td>${item.centroObstetrico ? "Sim" : "Não"}</td>
+
+                    <td>${item.centroNeonatal ? "Sim" : "Não"}</td>
+
+                </tr>
+            `;
+        });
+
+    atualizarPaginaModal();
+}
+
+function atualizarPaginaModal() {
+
+    const totalPaginas =
+        Math.max(
+            1,
+            Math.ceil(
+                resultadosBuscaModal.length /
+                registrosPorPaginaModal
+            )
+        );
+
+    document.getElementById(
+        "paginaInfoModal"
+    ).innerText =
+        `Página ${paginaBuscaModal} de ${totalPaginas}`;
+}
+
+function proximaPaginaModal() {
+
+    const totalPaginas =
+        Math.ceil(
+            resultadosBuscaModal.length /
+            registrosPorPaginaModal
+        );
+
+    if (paginaBuscaModal < totalPaginas) {
+
+        paginaBuscaModal++;
+
+        renderizarTabelaModal();
+    }
+}
+
+function paginaAnteriorModal() {
+
+    if (paginaBuscaModal > 1) {
+
+        paginaBuscaModal--;
+
+        renderizarTabelaModal();
+    }
+}
 carregarIndicadores();
 carregarTabela();
 carregarMapa();

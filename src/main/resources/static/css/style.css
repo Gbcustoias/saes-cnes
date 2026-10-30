@@ -56,7 +56,8 @@ section {
     margin-top: 10px;
 }
 
-#filtrosTabela {
+#filtrosTabela,
+#filtrosTabelaModal {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
@@ -171,4 +172,178 @@ tbody tr:hover {
     #mapaBrasil {
         height: 500px;
     }
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 999;
+}
+
+.modal-content {
+    background: white;
+    width: 80%;
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+#resultadoBuscaModal {
+
+    min-height: 120px;
+}
+
+#resultadoBuscaModal:empty::after {
+
+    content: "Nenhum registro encontrado";
+
+    display: block;
+
+    padding: 20px;
+
+    text-align: center;
+
+    color: #64748b;
+}
+
+#filtrosTabelaModal {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-bottom: 20px;
+}
+
+#filtrosTabelaModal input {
+
+    flex: 1;
+
+    padding: 10px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 6px;
+}
+
+.modal-content button {
+
+    background: #2563eb;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 6px;
+
+    padding: 10px 16px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+}
+
+.modal-content button:hover {
+
+    background: #1d4ed8;
+}
+.campoEdicao {
+
+    margin-bottom: 15px;
+}
+
+.campoEdicao input,
+.campoEdicao select {
+
+    width: 100%;
+
+    padding: 10px;
+
+    border-radius: 6px;
+
+    border: 1px solid #cbd5e1;
+
+    margin-top: 5px;
+}
+
+.campoCheckbox {
+
+    margin-top: 10px;
+}
+
+.acoesModal {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+.acoesCrudModal {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-bottom: 20px;
+}
+#paginacaoModal {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+#mensagemSistema {
+
+    position: fixed;
+
+    top: 20px;
+
+    right: 20px;
+
+    z-index: 9999;
+}
+
+#mensagemSistema {
+
+    position: fixed;
+
+    top: 20px;
+
+    right: 20px;
+
+    z-index: 9999;
+}
+
+.mensagemErro {
+
+    background: #dc2626;
+
+    color: white;
+
+    padding: 15px;
+
+    border-radius: 8px;
+
+    margin-bottom: 10px;
+}
+
+.btnExcluir {
+
+    background: #dc2626 !important;
+}
+.btnExcluir:hover {
+
+    background: #b91c1c !important;
 }

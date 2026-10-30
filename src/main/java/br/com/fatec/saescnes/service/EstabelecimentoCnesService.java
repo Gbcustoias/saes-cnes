@@ -126,4 +126,12 @@ public class EstabelecimentoCnesService {
         );
     }
 
+    public EstabelecimentoCnes criar(
+            EstabelecimentoCnes estabelecimento) {
+
+        return repository.save(
+                estabelecimento
+        );
+    }
+
 }
