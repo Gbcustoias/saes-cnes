@@ -437,3 +437,100 @@ hr {
 
     vertical-align: middle;
 }
+
+#controlesMapa {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-bottom: 20px;
+
+    flex-wrap: wrap;
+}
+
+#controlesMapa button {
+
+    background: #2563eb;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 10px 16px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+}
+
+#controlesMapa button:hover {
+
+    background: #1d4ed8;
+}
+
+#painelEstado {
+
+    background: #f8fafc;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    margin-bottom: 20px;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+#painelEstado h3 {
+
+    margin-top: 0;
+
+    margin-bottom: 15px;
+
+    color: #1e293b;
+}
+
+#painelEstado p {
+
+    margin: 8px 0;
+
+    color: #334155;
+}
+
+#containerMapa {
+
+    display: flex;
+
+    align-items: flex-start;
+}
+
+#mapaBrasil {
+
+    flex: 4;
+
+    height: 600px;
+
+    min-height: 600px;
+
+    margin: 0;
+}
+
+#painelEstado {
+
+    flex: 1;
+
+    min-width: 420px;
+
+    max-width: 500px;
+
+    height: 500px;
+
+    overflow-y: auto;
+
+    margin-bottom: 0;
+}

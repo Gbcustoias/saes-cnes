@@ -49,8 +49,81 @@
 </section>
 
 <section>
+
     <h2>Distribuição Geográfica dos Estabelecimentos de Saúde</h2>
+
+    <div id="controlesMapa">
+
+        <button onclick="alterarModoMapa('padrao')">
+            Padrão
+        </button>
+
+        <button onclick="alterarModoMapa('estabelecimentos')">
+            Estabelecimentos
+        </button>
+
+        <button onclick="alterarModoMapa('hospitalares')">
+            Hospitalares
+        </button>
+
+        <button onclick="alterarModoMapa('ambulatoriais')">
+            Ambulatoriais
+        </button>
+
+    </div>
+
+    <div id="containerMapa">
+
+        <div id="mapaBrasil"></div>
+
+        <div id="containerMapa">
+
+            <div id="mapaBrasil"></div>
+
+            <div id="painelEstado">
+
+                <h3 id="nomeEstadoSelecionado">
+                    Brasil
+                </h3>
+
+                <p>
+                    <strong>Estabelecimentos:</strong>
+                    <span id="painelEstabelecimentos">-</span>
+                </p>
+
+                <p>
+                    <strong>Hospitalares:</strong>
+                    <span id="painelHospitalares">-</span>
+                </p>
+
+                <p>
+                    <strong>Ambulatoriais:</strong>
+                    <span id="painelAmbulatoriais">-</span>
+                </p>
+
+                <p>
+                    <strong>Centros Cirúrgicos:</strong>
+                    <span id="painelCirurgicos">-</span>
+                </p>
+
+                <p>
+                    <strong>Centros Obstétricos:</strong>
+                    <span id="painelObstetricos">-</span>
+                </p>
+
+                <p>
+                    <strong>Centros Neonatais:</strong>
+                    <span id="painelNeonatais">-</span>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
     <div id="mapaBrasil"></div>
+
 </section>
 
 <section>

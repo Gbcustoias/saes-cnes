@@ -87,6 +87,10 @@ function formatarNumero(valor) {
     return Number(valor).toLocaleString("pt-BR");
 }
 
+let modoMapaAtual = "padrao";
+
+let dadosDashboardUf = [];
+
 async function carregarIndicadores() {
 
     const hospitalar =
@@ -529,16 +533,30 @@ async function carregarMapa() {
     const dados =
         await resposta.json();
 
+    dadosDashboardUf = dados;
+
+    atualizarPainelBrasil();
+
     const dadosPorUf = {};
 
     dados.forEach(item => {
         dadosPorUf[item.codigoUf] = item;
     });
 
+    document.getElementById(
+        "mapaBrasil"
+    ).innerHTML = "";
+
     am5.ready(function () {
+
+        if (window.rootMapaBrasil) {
+            window.rootMapaBrasil.dispose();
+        }
 
         const root =
             am5.Root.new("mapaBrasil");
+
+        window.rootMapaBrasil = root;
 
         root.setThemes([
             am5themes_Animated.new(root)
@@ -594,6 +612,99 @@ async function carregarMapa() {
                         if (!dadosUf) {
                             return;
                         }
+
+                        let valorMapa =
+                            dadosUf.estabelecimentos;
+
+                        if (modoMapaAtual === "hospitalares") {
+                            valorMapa =
+                                dadosUf.hospitalares;
+                        }
+
+                        if (modoMapaAtual === "ambulatoriais") {
+                            valorMapa =
+                                dadosUf.ambulatoriais;
+                        }
+
+                        const valoresModo =
+                            Object.values(dadosPorUf)
+                                .map(item => {
+
+                                    if (modoMapaAtual === "hospitalares") {
+                                        return item.hospitalares;
+                                    }
+
+                                    if (modoMapaAtual === "ambulatoriais") {
+                                        return item.ambulatoriais;
+                                    }
+
+                                    return item.estabelecimentos;
+                                });
+
+                        const maior =
+                            Math.max(...valoresModo);
+
+                        const menor =
+                            Math.min(...valoresModo);
+
+                        const intensidade =
+                            (valorMapa - menor) /
+                            (maior - menor || 1);
+
+                        if (modoMapaAtual === "estabelecimentos") {
+                            polygon.set(
+                                "fill",
+                                am5.color(
+                                    intensidade > 0.9 ? 0x7f1d1d :
+                                        intensidade > 0.8 ? 0x991b1b :
+                                            intensidade > 0.7 ? 0xb91c1c :
+                                                intensidade > 0.6 ? 0xdc2626 :
+                                                    intensidade > 0.5 ? 0xea580c :
+                                                        intensidade > 0.4 ? 0xf97316 :
+                                                            intensidade > 0.3 ? 0xfb923c :
+                                                                intensidade > 0.2 ? 0xfacc15 :
+                                                                    intensidade > 0.1 ? 0xfde047 :
+                                                                        0xfef08a
+                                )
+                            );
+                        }
+
+                        if (modoMapaAtual === "hospitalares") {
+
+                            polygon.set(
+                                "fill",
+                                am5.color(
+                                    intensidade > 0.8
+                                        ? 0x14532d
+                                        : intensidade > 0.6
+                                            ? 0x15803d
+                                            : intensidade > 0.4
+                                                ? 0x22c55e
+                                                : intensidade > 0.2
+                                                    ? 0x86efac
+                                                    : 0xdcfce7
+                                )
+                            );
+                        }
+
+                        if (modoMapaAtual === "ambulatoriais") {
+
+                            polygon.set(
+                                "fill",
+                                am5.color(
+                                    intensidade > 0.8
+                                        ? 0x581c87
+                                        : intensidade > 0.6
+                                            ? 0x7e22ce
+                                            : intensidade > 0.4
+                                                ? 0xa855f7
+                                                : intensidade > 0.2
+                                                    ? 0xd8b4fe
+                                                    : 0xf3e8ff
+                                )
+                            );
+                        }
+
                         polygon.events.on("click", () => {
 
                             if (
@@ -607,6 +718,12 @@ async function carregarMapa() {
                                 );
 
                                 estadoSelecionado = null;
+
+                                atualizarPainelBrasil();
+
+                                document.getElementById(
+                                    "nomeEstadoSelecionado"
+                                ).innerText = "Brasil";
 
                                 carregarIndicadores();
 
@@ -627,40 +744,97 @@ async function carregarMapa() {
                             estadoSelecionado =
                                 polygon;
 
-                            polygon.set(
-                                "fill",
-                                am5.color(0xff6b35)
-                            );
+                            if (modoMapaAtual === "padrao") {
 
-                            document.getElementById(
-                                "totalHospitalar"
-                            ).innerText = formatarNumero(
-                                dadosUf.hospitalares
-                            );
+                                polygon.set(
+                                    "fill",
+                                    am5.color(0xff6b35)
+                                );
 
-                            document.getElementById(
-                                "totalAmbulatorial"
-                            ).innerText = formatarNumero(
-                                dadosUf.ambulatoriais
-                            );
+                                document.getElementById(
+                                    "nomeEstadoSelecionado"
+                                ).innerText =
+                                    polygon.dataItem.dataContext.name;
 
-                            document.getElementById(
-                                "totalCentroCirurgico"
-                            ).innerText = formatarNumero(
-                                dadosUf.centrosCirurgicos
-                            );
+                                document.getElementById(
+                                    "painelEstabelecimentos"
+                                ).innerText =
+                                    formatarNumero(
+                                        dadosUf.estabelecimentos
+                                    );
 
-                            document.getElementById(
-                                "totalCentroObstetrico"
-                            ).innerText = formatarNumero(
-                                dadosUf.centrosObstetricos
-                            );
+                                document.getElementById(
+                                    "painelHospitalares"
+                                ).innerText =
+                                    formatarNumero(
+                                        dadosUf.hospitalares
+                                    );
 
-                            document.getElementById(
-                                "totalCentroNeonatal"
-                            ).innerText = formatarNumero(
-                                dadosUf.centrosNeonatais
-                            );
+                                document.getElementById(
+                                    "painelAmbulatoriais"
+                                ).innerText =
+                                    formatarNumero(
+                                        dadosUf.ambulatoriais
+                                    );
+
+                                document.getElementById(
+                                    "painelCirurgicos"
+                                ).innerText =
+                                    formatarNumero(
+                                        dadosUf.centrosCirurgicos
+                                    );
+
+                                document.getElementById(
+                                    "painelObstetricos"
+                                ).innerText =
+                                    formatarNumero(
+                                        dadosUf.centrosObstetricos
+                                    );
+
+                                document.getElementById(
+                                    "painelNeonatais"
+                                ).innerText =
+                                    formatarNumero(
+                                        dadosUf.centrosNeonatais
+                                    );
+
+                                document.getElementById(
+                                    "totalHospitalar"
+                                ).innerText =
+                                    formatarNumero(
+                                        dadosUf.hospitalares
+                                    );
+
+                                document.getElementById(
+                                    "totalAmbulatorial"
+                                ).innerText =
+                                    formatarNumero(
+                                        dadosUf.ambulatoriais
+                                    );
+
+                                document.getElementById(
+                                    "totalCentroCirurgico"
+                                ).innerText =
+                                    formatarNumero(
+                                        dadosUf.centrosCirurgicos
+                                    );
+
+                                document.getElementById(
+                                    "totalCentroObstetrico"
+                                ).innerText =
+                                    formatarNumero(
+                                        dadosUf.centrosObstetricos
+                                    );
+
+                                document.getElementById(
+                                    "totalCentroNeonatal"
+                                ).innerText =
+                                    formatarNumero(
+                                        dadosUf.centrosNeonatais
+                                    );
+                            }
+
+
 
                         });
 
@@ -680,15 +854,13 @@ Centros Obstétricos: ${formatarNumero(dadosUf.centrosObstetricos)}
 
 Centros Neonatais: ${formatarNumero(dadosUf.centrosNeonatais)}`
                         );
-
                     }
                 );
             }
         );
-
     });
-
 }
+
 function proximaPagina() {
 
     const totalPaginas =
@@ -1134,4 +1306,121 @@ async function executarImportacao() {
             "erro"
         );
     }
+}
+
+function alterarModoMapa(modo) {
+
+    modoMapaAtual = modo;
+
+    carregarMapa();
+}
+
+function atualizarPainelBrasil() {
+
+    const painel =
+        document.getElementById(
+            "painelEstado"
+        );
+
+    if (modoMapaAtual === "padrao") {
+
+        let estabelecimentos = 0;
+        let hospitalares = 0;
+        let ambulatoriais = 0;
+        let cirurgicos = 0;
+        let obstetricos = 0;
+        let neonatais = 0;
+
+        dadosDashboardUf.forEach(item => {
+
+            estabelecimentos += item.estabelecimentos;
+            hospitalares += item.hospitalares;
+            ambulatoriais += item.ambulatoriais;
+            cirurgicos += item.centrosCirurgicos;
+            obstetricos += item.centrosObstetricos;
+            neonatais += item.centrosNeonatais;
+        });
+
+        painel.innerHTML = `
+
+    <h3 id="nomeEstadoSelecionado">
+        Brasil
+    </h3>
+
+    <p>
+        <strong>Estabelecimentos:</strong>
+        <span id="painelEstabelecimentos">
+            ${formatarNumero(estabelecimentos)}
+        </span>
+    </p>
+
+    <p>
+        <strong>Hospitalares:</strong>
+        <span id="painelHospitalares">
+            ${formatarNumero(hospitalares)}
+        </span>
+    </p>
+
+    <p>
+        <strong>Ambulatoriais:</strong>
+        <span id="painelAmbulatoriais">
+            ${formatarNumero(ambulatoriais)}
+        </span>
+    </p>
+
+    <p>
+        <strong>Centros Cirúrgicos:</strong>
+        <span id="painelCirurgicos">
+            ${formatarNumero(cirurgicos)}
+        </span>
+    </p>
+
+    <p>
+        <strong>Centros Obstétricos:</strong>
+        <span id="painelObstetricos">
+            ${formatarNumero(obstetricos)}
+        </span>
+    </p>
+
+    <p>
+        <strong>Centros Neonatais:</strong>
+        <span id="painelNeonatais">
+            ${formatarNumero(neonatais)}
+        </span>
+    </p>
+
+`;
+        return;
+    }
+
+    let chave = "estabelecimentos";
+
+    if (modoMapaAtual === "hospitalares") {
+        chave = "hospitalares";
+    }
+
+    if (modoMapaAtual === "ambulatoriais") {
+        chave = "ambulatoriais";
+    }
+
+    const ranking =
+        [...dadosDashboardUf]
+            .sort((a, b) =>
+                b[chave] - a[chave]
+            );
+
+    painel.innerHTML = `
+        <h3>Ranking</h3>
+    `;
+
+    ranking.forEach((item, index) => {
+
+        painel.innerHTML += `
+            <p>
+                <strong>${index + 1}º - ${ufSigla[item.codigoUf]}</strong>
+                (${formatarNumero(item[chave])})
+            </p>
+        `;
+
+    });
 }
