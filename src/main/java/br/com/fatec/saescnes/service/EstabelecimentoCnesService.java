@@ -101,21 +101,36 @@ public class EstabelecimentoCnesService {
 
         return resultado;
     }
-    public void excluir(Long codigoCnes) {
+    public boolean excluir(Long codigoCnes) {
+
+        if (!repository.existsById(codigoCnes)) {
+            return false;
+        }
 
         repository.deleteById(codigoCnes);
 
+        return true;
     }
     public EstabelecimentoCnes buscarPorCodigo(
             Long codigoCnes) {
 
         return repository
                 .findByCodigoCnes(codigoCnes)
-                .orElseThrow();
+                .orElse(null);
     }
+
     public EstabelecimentoCnes atualizar(
             Long codigoCnes,
             EstabelecimentoCnes atualizado) {
+
+        EstabelecimentoCnes existente =
+                repository
+                        .findByCodigoCnes(codigoCnes)
+                        .orElse(null);
+
+        if (existente == null) {
+            return null;
+        }
 
         atualizado.setCodigoCnes(
                 codigoCnes
@@ -126,12 +141,44 @@ public class EstabelecimentoCnesService {
         );
     }
 
+
     public EstabelecimentoCnes criar(
             EstabelecimentoCnes estabelecimento) {
 
         return repository.save(
                 estabelecimento
         );
+    }
+
+    public List<EstabelecimentoCnes> filtrar(
+            String nome,
+            Integer uf) {
+
+        List<EstabelecimentoCnes> dados =
+                repository.findAll();
+
+        return dados.stream()
+
+                .filter(item ->
+                        nome == null
+                                || nome.isBlank()
+                                || (
+                                item.getNomeFantasia() != null
+                                        && item.getNomeFantasia()
+                                        .toLowerCase()
+                                        .contains(
+                                                nome.toLowerCase()
+                                        )
+                        )
+                )
+
+                .filter(item ->
+                        uf == null
+                                || item.getCodigoUf()
+                                .equals(uf)
+                )
+
+                .toList();
     }
 
 }

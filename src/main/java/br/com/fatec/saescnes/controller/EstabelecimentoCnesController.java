@@ -4,6 +4,10 @@ import br.com.fatec.saescnes.model.EstabelecimentoCnes;
 import br.com.fatec.saescnes.service.EstabelecimentoCnesService;
 import org.springframework.web.bind.annotation.*;
 import br.com.fatec.saescnes.model.DashboardUfDTO;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -92,36 +96,89 @@ public class EstabelecimentoCnesController {
         return service.dashboardPorUf();
     }
     @DeleteMapping("/{codigoCnes}")
-    public void excluir(
+    public ResponseEntity<Void> excluir(
             @PathVariable Long codigoCnes) {
 
-        service.excluir(codigoCnes);
+        boolean excluido =
+                service.excluir(
+                        codigoCnes
+                );
 
+        if (!excluido) {
+            return ResponseEntity
+                    .notFound()
+                    .build();
+        }
+
+        return ResponseEntity
+                .noContent()
+                .build();
     }
     @GetMapping("/{codigoCnes}")
-    public EstabelecimentoCnes buscarPorCodigo(
+    public ResponseEntity<EstabelecimentoCnes> buscarPorCodigo(
             @PathVariable Long codigoCnes) {
 
-        return service.buscarPorCodigo(
-                codigoCnes
+        EstabelecimentoCnes registro =
+                service.buscarPorCodigo(
+                        codigoCnes
+                );
+
+        if (registro == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(
+                registro
         );
     }
     @PutMapping("/{codigoCnes}")
-    public EstabelecimentoCnes atualizar(
+    public ResponseEntity<EstabelecimentoCnes> atualizar(
+
             @PathVariable Long codigoCnes,
+
+            @Valid
             @RequestBody EstabelecimentoCnes atualizado) {
 
-        return service.atualizar(
-                codigoCnes,
-                atualizado
+        EstabelecimentoCnes resultado =
+                service.atualizar(
+                        codigoCnes,
+                        atualizado
+                );
+
+        if (resultado == null) {
+            return ResponseEntity
+                    .notFound()
+                    .build();
+        }
+
+        return ResponseEntity.ok(
+                resultado
         );
     }
     @PostMapping
-    public EstabelecimentoCnes criar(
+    public ResponseEntity<EstabelecimentoCnes> criar(
+            @Valid
             @RequestBody EstabelecimentoCnes estabelecimento) {
 
-        return service.criar(
-                estabelecimento
+        EstabelecimentoCnes salvo =
+                service.criar(estabelecimento);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(salvo);
+    }
+    @GetMapping("/filtro")
+    public List<EstabelecimentoCnes> filtrar(
+
+            @RequestParam(required = false, defaultValue = "")
+            String nome,
+
+            @RequestParam(required = false)
+            Integer uf) {
+
+        return service.filtrar(
+                nome,
+                uf
         );
     }
 }

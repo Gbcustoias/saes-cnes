@@ -3,20 +3,25 @@ package br.com.fatec.saescnes.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "estabelecimento_cnes")
 public class EstabelecimentoCnes {
 
     @Id
+    @NotNull
     private Long codigoCnes;
 
+    @NotNull
     private Integer codigoUf;
 
     private Integer codigoMunicipio;
 
     private String nomeRazaoSocial;
 
+    @NotNull
     private String nomeFantasia;
 
     private String tipoGestao;
