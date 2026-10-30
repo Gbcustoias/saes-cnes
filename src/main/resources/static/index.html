@@ -99,7 +99,22 @@
         <button onclick="limparFiltros()">Limpar</button>
         <button onclick="abrirModalEditar()">Alterar Registro</button>
         <button onclick="abrirModalNovoRegistro()">Novo Registro</button>
+        <button
+                id="btnImportar"
+                onclick="abrirModalImportacao()">
+            Importar
+        </button>
 
+        <div
+                id="loadingImportacao"
+                class="loading-spinner"
+                style="display:none;">
+        </div>
+
+    </div>
+
+    <div id="contadorRegistros">
+        Total de registros: 0
     </div>
 
     <table border="1">
@@ -405,7 +420,65 @@
         </div>
     </div>
 </div>
+<div id="modalConfirmacao" class="modal">
 
+    <div class="modal-content modal-novo-registro">
+
+        <h2>Confirmar Exclusão</h2>
+
+        <p>
+            Deseja realmente excluir o registro selecionado?
+        </p>
+
+        <div class="acoesModal">
+
+            <button onclick="confirmarExclusao()">
+                Sim
+            </button>
+
+            <button onclick="fecharModalConfirmacao()">
+                Não
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+<div id="modalImportacao" class="modal">
+
+    <div class="modal-content modal-novo-registro">
+
+        <h2>Importação de Dados CNES</h2>
+
+        <p>
+            A importação irá atualizar os registros utilizando a API oficial do CNES.
+        </p>
+
+        <div id="resultadoImportacao">
+
+            <p>Registros lidos: -</p>
+            <p>Importados: -</p>
+            <p>Duplicados: -</p>
+            <p>Rejeitados: -</p>
+
+        </div>
+
+        <div class="acoesModal">
+
+            <button onclick="executarImportacao()">
+                Importar
+            </button>
+
+            <button onclick="fecharModalImportacao()">
+                Fechar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 <div id="mensagemSistema"></div>
 
 <script src="js/script.js"></script>

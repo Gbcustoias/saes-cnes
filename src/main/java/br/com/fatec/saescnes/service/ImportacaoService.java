@@ -4,6 +4,7 @@ import br.com.fatec.saescnes.model.EstabelecimentoCnes;
 import br.com.fatec.saescnes.repository.EstabelecimentoCnesRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import br.com.fatec.saescnes.model.ImportacaoResultadoDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class ImportacaoService {
         this.repository = repository;
     }
 
-    public void sincronizarCnes() {
+    public ImportacaoResultadoDTO sincronizarCnes() {
 
         RestTemplate restTemplate =
                 new RestTemplate();
@@ -30,6 +31,12 @@ public class ImportacaoService {
         int offset = 0;
 
         long totalImportado = 0;
+
+        long totalLidos = 0;
+
+        long totalDuplicados = 0;
+
+        long totalRejeitados = 0;
 
         java.util.Set<Long> codigosProcessados =
                 new java.util.HashSet<>();
@@ -68,10 +75,15 @@ public class ImportacaoService {
 
             for (Map<String, Object> item : estabelecimentos) {
 
+                totalLidos++;
+
                 Object codigoObj =
                         item.get("codigo_cnes");
 
                 if (codigoObj == null) {
+
+                    totalRejeitados++;
+
                     continue;
                 }
 
@@ -85,6 +97,9 @@ public class ImportacaoService {
                                 codigoCnes
                         )
                 ) {
+
+                    totalDuplicados++;
+
                     continue;
                 }
 
@@ -361,6 +376,13 @@ public class ImportacaoService {
         System.out.println(
                 "SINCRONIZACAO CONCLUIDA. TOTAL: "
                         + totalImportado
+        );
+
+        return new ImportacaoResultadoDTO(
+                totalLidos,
+                totalImportado,
+                totalDuplicados,
+                totalRejeitados
         );
     }
 }

@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import br.com.fatec.saescnes.model.DashboardUfDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import br.com.fatec.saescnes.service.ImportacaoService;
+import br.com.fatec.saescnes.model.ImportacaoResultadoDTO;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -17,10 +18,14 @@ public class EstabelecimentoCnesController {
 
     private final EstabelecimentoCnesService service;
 
+    private final ImportacaoService importacaoService;
+
     public EstabelecimentoCnesController(
-            EstabelecimentoCnesService service) {
+            EstabelecimentoCnesService service,
+            ImportacaoService importacaoService) {
 
         this.service = service;
+        this.importacaoService = importacaoService;
     }
 
     @GetMapping
@@ -180,5 +185,25 @@ public class EstabelecimentoCnesController {
                 nome,
                 uf
         );
+    }
+    @PostMapping("/importar")
+    public ResponseEntity<?> importar() {
+
+        try {
+
+            ImportacaoResultadoDTO resultado =
+                    importacaoService.sincronizarCnes();
+
+            return ResponseEntity.ok(
+                    resultado
+            );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return ResponseEntity.badRequest()
+                    .body(e.getMessage());
+        }
     }
 }

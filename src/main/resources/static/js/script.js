@@ -410,7 +410,7 @@ async function salvarRegistroModal() {
 
     if (resposta.ok) {
 
-        alert(
+        mostrarMensagem(
             "Registro atualizado com sucesso"
         );
 
@@ -418,7 +418,7 @@ async function salvarRegistroModal() {
 
     } else {
 
-        alert(
+        mostrarMensagem(
             "Erro ao atualizar registro"
         );
     }
@@ -494,63 +494,33 @@ async function salvarNovoRegistro() {
 
         fecharModalNovoRegistro();
 
-        alert(
+        mostrarMensagem(
             "Registro cadastrado com sucesso"
         );
 
     } else {
 
-        alert(
+        mostrarMensagem(
             "Erro ao cadastrar registro"
         );
     }
 }
 
-async function excluirRegistro() {
+function excluirRegistro() {
 
     if (!codigoCnesSelecionado) {
 
-        alert(
-            "Selecione um registro"
+        mostrarMensagem(
+            "Selecione um registro",
+            "erro"
         );
 
         return;
     }
 
-    const confirmar =
-        confirm(
-            "Deseja realmente excluir o registro?"
-        );
-
-    if (!confirmar) {
-        return;
-    }
-
-    const resposta =
-        await fetch(
-            `/api/estabelecimentos/${codigoCnesSelecionado}`,
-            {
-                method: "DELETE"
-            }
-        );
-
-    if (resposta.ok) {
-
-        alert(
-            "Registro excluído com sucesso"
-        );
-
-        fecharModalEditar();
-
-        carregarTabela();
-
-    } else {
-
-        alert(
-            "Erro ao excluir registro"
-        );
-    }
+    abrirModalConfirmacao();
 }
+
 async function carregarMapa() {
 
     const resposta =
@@ -776,6 +746,11 @@ function renderizarTabela() {
 
     tabela.innerHTML = "";
 
+    document.getElementById(
+        "contadorRegistros"
+    ).innerText =
+        `Total de registros: ${todosOsDados.length}`;
+
     const inicio =
         (paginaAtual - 1)
         * registrosPorPagina;
@@ -990,3 +965,173 @@ function paginaAnteriorModal() {
 carregarIndicadores();
 carregarTabela();
 carregarMapa();
+
+function mostrarMensagem(
+    texto,
+    tipo = "sucesso"
+) {
+
+    const mensagem =
+        document.getElementById(
+            "mensagemSistema"
+        );
+
+    mensagem.innerHTML = `
+        <div class="${
+        tipo === "erro"
+            ? "mensagemErro"
+            : "mensagemSucesso"
+    }">
+            ${texto}
+        </div>
+    `;
+
+    if (texto.includes("importação")) {
+        return;
+    }
+
+    setTimeout(() => {
+        mensagem.innerHTML = "";
+    }, 3000);
+}
+
+function abrirModalConfirmacao() {
+
+    document.getElementById(
+        "modalConfirmacao"
+    ).style.display = "block";
+}
+
+function fecharModalConfirmacao() {
+
+    document.getElementById(
+        "modalConfirmacao"
+    ).style.display = "none";
+}
+
+async function confirmarExclusao() {
+
+    fecharModalConfirmacao();
+
+    const resposta =
+        await fetch(
+            `/api/estabelecimentos/${codigoCnesSelecionado}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+    if (resposta.ok) {
+
+        mostrarMensagem(
+            "Registro excluído com sucesso"
+        );
+
+
+        fecharModalEditar();
+
+        carregarTabela();
+
+    } else {
+
+        mostrarMensagem(
+            "Erro ao excluir registro",
+            "erro"
+        );
+    }
+}
+
+function abrirModalImportacao() {
+
+    document.getElementById(
+        "modalImportacao"
+    ).style.display = "block";
+}
+
+function fecharModalImportacao() {
+
+    document.getElementById(
+        "modalImportacao"
+    ).style.display = "none";
+}
+
+async function executarImportacao() {
+
+    const botao =
+        document.getElementById(
+            "btnImportar"
+        );
+
+    const spinner =
+        document.getElementById(
+            "loadingImportacao"
+        );
+
+    botao.disabled = true;
+
+    botao.innerText =
+        "Importando...";
+
+    fecharModalImportacao();
+
+    spinner.style.display = "inline-block";
+
+    try {
+
+        const resposta =
+            await fetch(
+                "/api/estabelecimentos/importar",
+                {
+                    method: "POST"
+                }
+            );
+
+        const dados =
+            await resposta.json();
+
+        spinner.style.display = "none";
+
+        botao.disabled = false;
+
+        botao.innerText =
+            "Importar";
+
+        document.getElementById(
+            "resultadoImportacao"
+        ).innerHTML = `
+
+            <h3>Importação concluída</h3>
+
+            <p><strong>Registros lidos:</strong> ${dados.lidos}</p>
+
+            <p><strong>Importados:</strong> ${dados.importados}</p>
+
+            <p><strong>Duplicados:</strong> ${dados.duplicados}</p>
+
+            <p><strong>Rejeitados:</strong> ${dados.rejeitados}</p>
+
+        `;
+
+        carregarTabela();
+        carregarIndicadores();
+        carregarMapa();
+
+        mostrarMensagem(
+            "Importação concluída com sucesso"
+        );
+
+    } catch (erro) {
+
+        spinner.style.display = "none";
+
+        botao.disabled = false;
+
+        botao.innerText =
+            "Importar";
+
+        mostrarMensagem(
+            "Erro durante a importação",
+            "erro"
+        );
+    }
+}

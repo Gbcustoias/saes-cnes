@@ -268,18 +268,47 @@ tbody tr:hover {
 }
 
 #mensagemSistema {
+
     position: fixed;
-    top: 20px;
-    right: 20px;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
     z-index: 9999;
+}
+
+.mensagemSucesso,
+.mensagemErro {
+
+    min-width: 400px;
+
+    max-width: 600px;
+
+    padding: 20px;
+
+    border-radius: 12px;
+
+    text-align: center;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+
+    border: 3px solid white;
+}
+
+.mensagemSucesso {
+    background: #16a34a;
+    color: white;
 }
 
 .mensagemErro {
     background: #dc2626;
     color: white;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 10px;
 }
 
 .btnExcluir {
@@ -363,4 +392,48 @@ hr {
     height: auto;
     max-height: 90vh;
     overflow-y: auto;
+}
+
+#contadorRegistros {
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #1e293b;
+}
+
+.loading-spinner {
+
+    width: 50px;
+    height: 50px;
+
+    border: 5px solid #e2e8f0;
+    border-top: 5px solid #2563eb;
+
+    border-radius: 50%;
+
+    animation: girar 1s linear infinite;
+
+    margin: 20px auto;
+}
+
+@keyframes girar {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#loadingImportacao {
+
+    width: 25px;
+    height: 25px;
+
+    display: none;
+
+    margin-left: 10px;
+
+    vertical-align: middle;
 }
