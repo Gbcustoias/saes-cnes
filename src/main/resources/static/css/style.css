@@ -4,7 +4,30 @@ body {
     margin: 20px;
 }
 
-h1,
+h1 {
+
+    text-align: center;
+
+    background: linear-gradient(
+            135deg,
+            #2563eb,
+            #1e40af
+    );
+
+    color: white;
+
+    padding: 20px;
+
+    border-radius: 12px;
+
+    margin-bottom: 25px;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,.15);
+
+    font-size: 32px;
+
+    font-weight: 700;
+}
 h2 {
     color: #1e293b;
 }
@@ -511,11 +534,9 @@ hr {
 
 #mapaBrasil {
 
-    flex: 4;
+    flex: 2;
 
-    height: 600px;
-
-    min-height: 600px;
+    height: 500px;
 
     margin: 0;
 }
