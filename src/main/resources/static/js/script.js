@@ -157,14 +157,112 @@ function abrirModalEditar() {
 
 }
 
+function abrirModalNovoRegistro() {
+
+    limparFormularioNovo();
+
+    document.getElementById(
+        "modalNovoRegistro"
+    ).style.display = "block";
+}
+
+function limparFormularioNovo() {
+
+    document.getElementById(
+        "novoCodigoCnes"
+    ).value = "";
+
+    document.getElementById(
+        "novoNomeFantasia"
+    ).value = "";
+
+    document.getElementById(
+        "novoEsferaAdministrativa"
+    ).value = "";
+
+    document.getElementById(
+        "novoUf"
+    ).value = "35";
+
+    document.getElementById(
+        "novoHospitalar"
+    ).checked = false;
+
+    document.getElementById(
+        "novoAmbulatorial"
+    ).checked = false;
+
+    document.getElementById(
+        "novoCentroCirurgico"
+    ).checked = false;
+
+    document.getElementById(
+        "novoCentroObstetrico"
+    ).checked = false;
+
+    document.getElementById(
+        "novoCentroNeonatal"
+    ).checked = false;
+}
+
+function limparFormularioEdicao() {
+
+    codigoCnesSelecionado = null;
+
+    document.getElementById(
+        "editarCodigoCnes"
+    ).value = "";
+
+    document.getElementById(
+        "editarNomeFantasia"
+    ).value = "";
+
+    document.getElementById(
+        "editarEsferaAdministrativa"
+    ).value = "";
+
+    document.getElementById(
+        "editarUf"
+    ).value = "35";
+
+    document.getElementById(
+        "editarHospitalar"
+    ).checked = false;
+
+    document.getElementById(
+        "editarAmbulatorial"
+    ).checked = false;
+
+    document.getElementById(
+        "editarCentroCirurgico"
+    ).checked = false;
+
+    document.getElementById(
+        "editarCentroObstetrico"
+    ).checked = false;
+
+    document.getElementById(
+        "editarCentroNeonatal"
+    ).checked = false;
+}
+
 function fecharModalEditar() {
 
+    limparFormularioEdicao();
 
     document.getElementById(
         "modalEditar"
     ).style.display = "none";
-
 }
+function fecharModalNovoRegistro() {
+
+    limparFormularioNovo();
+
+    document.getElementById(
+        "modalNovoRegistro"
+    ).style.display = "none";
+}
+
 async function selecionarRegistro(
     codigoCnes
 ) {
@@ -176,6 +274,18 @@ async function selecionarRegistro(
 
     const item =
         await resposta.json();
+
+    document.getElementById(
+        "editarCodigoCnes"
+    ).value =
+        item.codigoCnes
+
+    document.getElementById(
+        "editarCodigoCnes"
+    ).setAttribute(
+        "readonly",
+        true
+    );
 
     document.getElementById(
         "editarNomeFantasia"
@@ -223,6 +333,13 @@ async function selecionarRegistro(
 async function salvarRegistroModal() {
 
     const body = {
+
+        codigoCnes:
+            Number(
+                document.getElementById(
+                    "editarCodigoCnes"
+                ).value
+            ),
 
         nomeFantasia:
         document.getElementById(
@@ -303,6 +420,88 @@ async function salvarRegistroModal() {
 
         alert(
             "Erro ao atualizar registro"
+        );
+    }
+}
+
+async function salvarNovoRegistro() {
+
+    const body = {
+
+        codigoCnes: Number(
+            document.getElementById(
+                "novoCodigoCnes"
+            ).value
+        ),
+
+        nomeFantasia:
+        document.getElementById(
+            "novoNomeFantasia"
+        ).value,
+
+        esferaAdministrativa:
+        document.getElementById(
+            "novoEsferaAdministrativa"
+        ).value,
+
+        codigoUf: Number(
+            document.getElementById(
+                "novoUf"
+            ).value
+        ),
+
+        atendimentoHospitalar:
+            document.getElementById(
+                "novoHospitalar"
+            ).checked ? 1 : 0,
+
+        atendimentoAmbulatorial:
+            document.getElementById(
+                "novoAmbulatorial"
+            ).checked ? 1 : 0,
+
+        centroCirurgico:
+            document.getElementById(
+                "novoCentroCirurgico"
+            ).checked ? 1 : 0,
+
+        centroObstetrico:
+            document.getElementById(
+                "novoCentroObstetrico"
+            ).checked ? 1 : 0,
+
+        centroNeonatal:
+            document.getElementById(
+                "novoCentroNeonatal"
+            ).checked ? 1 : 0
+    };
+
+    const resposta = await fetch(
+        "/api/estabelecimentos",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type":
+                    "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+    );
+
+    if (resposta.ok) {
+
+        carregarTabela();
+
+        fecharModalNovoRegistro();
+
+        alert(
+            "Registro cadastrado com sucesso"
+        );
+
+    } else {
+
+        alert(
+            "Erro ao cadastrar registro"
         );
     }
 }
@@ -590,6 +789,7 @@ function renderizarTabela() {
 
             tabela.innerHTML += `
                 <tr>
+                    <td>${item.codigoCnes ?? ""}</td>
                     <td>${item.nomeFantasia ?? ""}</td>
                     <td>${item.esferaAdministrativa ?? ""}</td>
                     <td>${ufSigla[item.codigoUf] ?? item.codigoUf}</td>
@@ -719,7 +919,9 @@ function renderizarTabelaModal() {
 
             tabela.innerHTML += `
                 <tr onclick="selecionarRegistro(${item.codigoCnes})">
-
+                    
+                    <td>${item.codigoCnes ?? ""}</td>
+                    
                     <td>${item.nomeFantasia ?? ""}</td>
 
                     <td>${item.esferaAdministrativa ?? ""}</td>

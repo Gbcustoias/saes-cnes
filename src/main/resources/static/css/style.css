@@ -60,7 +60,7 @@ section {
 #filtrosTabelaModal {
     display: flex;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     flex-wrap: wrap;
     align-items: center;
 }
@@ -149,7 +149,6 @@ tbody tr:hover {
 }
 
 @media (max-width: 768px) {
-
     body {
         margin: 10px;
     }
@@ -180,170 +179,188 @@ tbody tr:hover {
     inset: 0;
     background: rgba(0,0,0,.5);
     z-index: 999;
+    overflow-y: auto;
+    padding: 20px;
 }
 
 .modal-content {
     background: white;
-    width: 80%;
-    max-width: 900px;
-    margin: 50px auto;
-    padding: 20px;
+    width: 90vw;
+    max-width: 1100px;
+    max-height: 90vh;
+    overflow-y: auto;
+    margin: 20px auto;
+    padding: 25px;
     border-radius: 12px;
 }
 
-#resultadoBuscaModal {
-
-    min-height: 120px;
-}
-
 #resultadoBuscaModal:empty::after {
-
     content: "Nenhum registro encontrado";
-
     display: block;
-
     padding: 20px;
-
     text-align: center;
-
     color: #64748b;
 }
 
 #filtrosTabelaModal {
-
     display: flex;
-
     gap: 10px;
-
     margin-bottom: 20px;
 }
 
 #filtrosTabelaModal input {
-
     flex: 1;
-
     padding: 10px;
-
     border: 1px solid #cbd5e1;
-
     border-radius: 6px;
 }
 
 .modal-content button {
-
     background: #2563eb;
-
     color: white;
-
     border: none;
-
     border-radius: 6px;
-
     padding: 10px 16px;
-
     cursor: pointer;
-
     font-weight: 600;
 }
 
 .modal-content button:hover {
-
     background: #1d4ed8;
 }
-.campoEdicao {
 
+.campoEdicao {
     margin-bottom: 15px;
 }
 
 .campoEdicao input,
 .campoEdicao select {
-
     width: 100%;
-
     padding: 10px;
-
     border-radius: 6px;
-
     border: 1px solid #cbd5e1;
-
     margin-top: 5px;
 }
 
 .campoCheckbox {
-
     margin-top: 10px;
 }
 
 .acoesModal {
-
     display: flex;
-
     gap: 10px;
-
     margin-top: 20px;
+    justify-content: center;
 }
 
 .acoesCrudModal {
-
     display: flex;
-
     gap: 10px;
-
     margin-bottom: 20px;
 }
+
 #paginacaoModal {
-
     display: flex;
-
     justify-content: center;
-
     align-items: center;
-
     gap: 10px;
-
     margin-top: 15px;
 }
 
 #mensagemSistema {
-
     position: fixed;
-
     top: 20px;
-
     right: 20px;
-
-    z-index: 9999;
-}
-
-#mensagemSistema {
-
-    position: fixed;
-
-    top: 20px;
-
-    right: 20px;
-
     z-index: 9999;
 }
 
 .mensagemErro {
-
     background: #dc2626;
-
     color: white;
-
     padding: 15px;
-
     border-radius: 8px;
-
     margin-bottom: 10px;
 }
 
 .btnExcluir {
-
     background: #dc2626 !important;
 }
-.btnExcluir:hover {
 
+.btnExcluir:hover {
     background: #b91c1c !important;
+}
+
+.painelBusca,
+.painelEdicao {
+    min-width: 0;
+}
+
+.painelBusca table {
+    min-width: 900px;
+    table-layout: auto;
+}
+
+.painelBusca th,
+.painelBusca td {
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.painelBusca table th,
+.painelBusca table td {
+    padding: 6px;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+#editarCodigoCnes::-webkit-outer-spin-button,
+#editarCodigoCnes::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.tabelaModalContainer {
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+}
+
+.tabelaModalContainer table {
+    width: 100%;
+    min-width: 1000px;
+}
+
+.painelEdicao {
+    margin-top: 25px;
+}
+
+.acoesModal {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+hr {
+    margin: 25px 0;
+}
+
+.modal-editar-registro {
+    width: 90vw;
+    max-width: 1100px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-novo-registro {
+    width: 600px;
+    max-width: 95%;
+    height: auto;
+    max-height: 90vh;
+    overflow-y: auto;
 }
