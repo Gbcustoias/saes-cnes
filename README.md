@@ -1,20 +1,22 @@
-```markdown
 # Sistema de Gestão e Análise de Estabelecimentos (CNES)
+
 ---
+
 ## Grupo
 
-Giovani Boldrini Custoias 2040482423006
-João Vitor Evangelista da Silva 2040482423021
-Jonathas Pinheiro de Arruda 2040482423040
-Sarah Bianca Tambalo da Silva 2040482423044
+- Giovani Boldrini Custoias – 2040482423006
+- João Vitor Evangelista da Silva – 2040482423021
+- Jonathas Pinheiro de Arruda – 2040482423040
+- Sarah Bianca Tambalo da Silva – 2040482423044
 
+---
 
 ## Modelo de Dados
 
 ### Campos Utilizados no Projeto
 
 | Campo | Motivo da Utilização |
-|---------|---------|
+| :--- | :--- |
 | `codigo_cnes` | Identificador único do estabelecimento e chave primária da aplicação. |
 | `codigo_uf` | Permite filtros por estado, indicadores e visualizações no mapa. |
 | `codigo_municipio` | Identificação geográfica complementar do estabelecimento. |
@@ -51,8 +53,7 @@ Os campos abaixo não foram utilizados por não contribuírem diretamente para o
 - `codigo_esfera_administrativa_unidade`
 - `data_atualizacao`
 
-Motivos para descarte:
-
+**Motivos para descarte:**
 - Não eram utilizados em filtros ou pesquisas da aplicação.
 - Não contribuíam para os indicadores apresentados no dashboard.
 - Não eram utilizados nas visualizações do mapa.
@@ -65,20 +66,16 @@ Motivos para descarte:
 
 Os dados utilizados no projeto são obtidos diretamente da API oficial do Cadastro Nacional de Estabelecimentos de Saúde (CNES), disponibilizada pelo Ministério da Saúde por meio do portal de Dados Abertos.
 
-Fonte oficial:
+- **Fonte oficial:** [API de Dados Abertos do CNES](https://apidadosabertos.saude.gov.br/v1/#/CNES/get_cnes_estabelecimentos)
+- **Última sincronização realizada em:** 30/10/2026
 
-https://apidadosabertos.saude.gov.br/v1/#/CNES/get_cnes_estabelecimentos
-
-### Última Atualização da Base
-
-Última sincronização realizada em: 30/10/2026
+---
 
 ## Requisitos
 
 ### Tecnologias Utilizadas
 
 #### Backend
-
 - Java 21
 - Spring Boot
 - Spring Data JPA
@@ -88,19 +85,18 @@ https://apidadosabertos.saude.gov.br/v1/#/CNES/get_cnes_estabelecimentos
 - Neon Database
 
 #### Frontend
-
 - HTML5
 - CSS3
 - JavaScript
 - amCharts 5
 
+---
 
 ## Instruções de Execução
 
 ### 1. Clonar o Repositório
-
 ```bash
-git clone URL_DO_REPOSITORIO
+git clone [https://github.com/Gbcustoias/saes-cnes](https://github.com/Gbcustoias/saes-cnes)
 ```
 
 ### 2. Acessar a Pasta do Projeto
